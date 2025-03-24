@@ -1,0 +1,11 @@
+@for(date of dates; track date; let i = $index){
+<div class="card">
+    <div class="dateRangeSelection card-body">
+        <i class="fa-solid fa-trash" (click)="removeDate(i)"></i>
+        <input class="form-control" required [(ngModel)]="date.date" type="date" name="date" >
+        <input class="form-control" required [(ngModel)]="date.startTime" type="time" name="startTime">
+        <input class="form-control" required [(ngModel)]="date.endTime" type="time" name="endTime">
+    </div>
+</div>
+}
+<button type="button" class="btn btn-success" (click)="addDate()"><i class="fa-solid fa-plus"></i></button>

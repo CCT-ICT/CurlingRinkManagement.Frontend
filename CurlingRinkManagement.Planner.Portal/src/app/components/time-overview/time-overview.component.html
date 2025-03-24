@@ -1,0 +1,5 @@
+    @for(time of times; track time){
+    <div [style.height]="heightInPixels + 'px'" style="padding-right: 5px;" >
+        <p style="text-align: right;">{{time.toLocaleString("nl-NL", {hour:"2-digit", minute:"2-digit"})}}</p>
+    </div>
+    }

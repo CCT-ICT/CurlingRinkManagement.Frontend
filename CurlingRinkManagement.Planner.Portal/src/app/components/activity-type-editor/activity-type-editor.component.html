@@ -1,0 +1,51 @@
+@if(error != null){
+<div class="alert alert-danger" role="alert">
+    An unexpected error occured: {{error}}
+</div>
+}
+
+<div class="card">
+    <div class="card-header">
+        Activity types
+    </div>
+    <button class="btn btn-success" (click)="updateActivityTypes()">Save</button>
+    <div class="card-body">
+        @for(activityType of activityTypes; track activityType; let i = $index){
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <!-- <div class="col-12"><i class="fa-solid fa-trash" (click)="deleteActivityType(i)"></i> Add when actual deletion is implemented</div> -->
+                    <div class="col-2">
+                        <p> Color</p>
+                    </div>
+                    <div class="col-4">
+                        <p>Title</p>
+                    </div>
+                    <div class="col-3">
+                        <p>Recommended maintenance before</p>
+                    </div>
+                    <div class="col-3">
+                        <p>Recommended maintenance after</p>
+                    </div>
+                    <div class="col-2">
+                        <input class="form-control form-control-color" type="color" name="color"
+                            [(ngModel)]="activityType.color">
+                    </div>
+                    <div class="col-4">
+                        <input class="form-control" required type="text" name="type" [(ngModel)]="activityType.type">
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" required type="number" name="minutesBefore"
+                            [(ngModel)]="activityType.recommendedMinutesBlockedBefore">
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" required type="number" name="minutesAfter"
+                            [(ngModel)]="activityType.recommendedMinutesBlockedAfter">
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+        <button type="button" class="btn btn-success" (click)="addActivityType()"><i class="fa-solid fa-plus"></i></button>
+    </div>
+</div>
