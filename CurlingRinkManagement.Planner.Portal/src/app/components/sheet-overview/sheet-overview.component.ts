@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, Input, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EventModel } from '../../models/event.model';
 import { ActivityTypeModel } from '../../models/activity-type.model';
 import { SheetModel } from '../../models/sheet.model';
@@ -16,18 +16,20 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
   templateUrl: './sheet-overview.component.html',
   styleUrl: './sheet-overview.component.scss'
 })
-export class SheetOverviewComponent implements OnInit {
+export class SheetOverviewComponent implements OnInit, OnChanges {
   @Input()
   public sheet: SheetModel = new SheetModel();
 
   @Input()
   public activityTypes: ActivityTypeModel[] = []
+  @Input()
+  public dayString: string = "";
 
+  public day: Date = new Date();
 
   public detailInMinutes: number = 15;
   public heightInPixels = 60;
   public times: Date[] = [];
-  public day: Date = new Date();
   public currentEvent: EventModel | null = null;
   public events: EventModel[] = []
   public plannedDates: DateTimeInput[] = [];
@@ -41,6 +43,14 @@ export class SheetOverviewComponent implements OnInit {
   });
 
   constructor(private activityService: ActivityService) { }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    this.times = [];
+    this.events = [];
+    this.isCreating = false;
+    this.loadTimes();
+    this.loadActivities();
+  }
 
 
   ngOnInit(): void {
@@ -49,12 +59,12 @@ export class SheetOverviewComponent implements OnInit {
   }
 
   private loadTimes() {
-    this.times = [];
+    this.day = new Date(this.dayString);
     let currentTime = 0;
     while (currentTime < 24 * 60) {
-      let today = new Date(this.day.getFullYear(), this.day.getMonth(), this.day.getDate());
-      today.setMinutes(currentTime);
-      this.times.push(today);
+      let currentDate = new Date(this.day.getFullYear(), this.day.getMonth(), this.day.getDate());
+      currentDate.setMinutes(currentTime);
+      this.times.push(currentDate);
       currentTime += this.detailInMinutes;
     }
   }

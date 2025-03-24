@@ -5,11 +5,12 @@ import { SheetService } from '../../services/sheet.service';
 import { ActivityTypeService } from '../../services/activity-type.service';
 import { SheetOverviewComponent } from '../sheet-overview/sheet-overview.component';
 import { TimeOverviewComponent } from '../time-overview/time-overview.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-planner',
   standalone: true,
-  imports: [ SheetOverviewComponent, TimeOverviewComponent],
+  imports: [ SheetOverviewComponent, TimeOverviewComponent, FormsModule],
   templateUrl: './planner.component.html',
   styleUrl: './planner.component.scss'
 })
@@ -17,9 +18,13 @@ export class PlannerComponent {
   public sheets: SheetModel[] = [];
   public activityTypes: ActivityTypeModel[] = [];
 
+  public dateString:string = "";
+
   constructor(private sheetService: SheetService, private activityTypeService: ActivityTypeService){}
 
   ngOnInit(): void {
+    let today = new Date();
+    this.dateString = today.toISOString().split('T')[0];
     this.loadActivityTypes();
     this.loadSheets();
   }
