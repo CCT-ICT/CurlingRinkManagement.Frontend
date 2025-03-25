@@ -60,6 +60,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
 
   private loadTimes() {
     this.day = new Date(this.dayString);
+    this.times = []
     let currentTime = 0;
     while (currentTime < 24 * 60) {
       let currentDate = new Date(this.day.getFullYear(), this.day.getMonth(), this.day.getDate());
