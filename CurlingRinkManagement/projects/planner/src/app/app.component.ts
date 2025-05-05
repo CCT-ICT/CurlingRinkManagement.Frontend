@@ -3,10 +3,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { OAuthService, provideOAuthClient } from 'angular-oauth2-oidc';
 import { filter } from 'rxjs/operators';
 import { authCodeFlowConfig } from './auth.config';
+import { ClubSelectComponent } from '../../../common-api/src/public-api';
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, RouterLink,],
+    imports: [RouterOutlet, RouterLink, ClubSelectComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss'
 })
@@ -21,7 +22,7 @@ export class AppComponent {
         // Automatically load user profile
         this.oauthService.events
           .pipe(filter((e) => e.type === 'token_received'))
-          .subscribe((_) => {this.oauthService.loadUserProfile(); console.log(this.oauthService.authorizationHeader())});
+          .subscribe((_) => this.oauthService.loadUserProfile());
       }
 
       get userName(): string | undefined {

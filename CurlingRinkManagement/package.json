@@ -1,9 +1,10 @@
 {
-  "name": "curling-rink-management.planner.portal",
+  "name": "curling-rink-management",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4201 --ssl",
+    "start:planner": "ng serve --project=planner --port=4201 --ssl --ssl-key c:/SSL/localhost.key --ssl-cert c:/SSL/localhost.crt ",
+    "start:all":"npm run start:planner",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -37,6 +38,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.5.2"
+    "ng-packagr": "^19.2.0",
+    "typescript": "~5.7.2"
   }
 }

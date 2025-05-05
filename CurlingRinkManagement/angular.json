@@ -3,41 +3,41 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "CurlingRinkManagement.Planner.Portal": {
+    "planner": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "",
-      "sourceRoot": "src",
+      "root": "projects/planner",
+      "sourceRoot": "projects/planner/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/curling-rink-management.planner.portal",
-            "index": "src/index.html",
-            "browser": "src/main.ts",
+            "outputPath": "dist/planner",
+            "index": "projects/planner/src/index.html",
+            "browser": "projects/planner/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
-            "tsConfig": "tsconfig.app.json",
+            "tsConfig": "projects/planner/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "projects/planner/public"
               }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
-              "public/fontawesome-free-6.6.0-web/css/fontawesome.css",
-              "public/fontawesome-free-6.6.0-web/css/brands.css",
-              "public/fontawesome-free-6.6.0-web/css/solid.css",
-              "src/styles.scss"
+              "projects/planner/public/fontawesome-free-6.6.0-web/css/fontawesome.css",
+              "projects/planner/public/fontawesome-free-6.6.0-web/css/brands.css",
+              "projects/planner/public/fontawesome-free-6.6.0-web/css/solid.css",
+              "projects/planner/src/styles.scss"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
@@ -53,8 +53,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
                 }
               ],
               "outputHashing": "all"
@@ -65,8 +65,8 @@
               "sourceMap": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
+                  "replace": "projects/planner/src/environments/environment.ts",
+                  "with": "projects/planner/src/environments/environment.development.ts"
                 }
               ]
             }
@@ -77,10 +77,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "CurlingRinkManagement.Planner.Portal:build:production"
+              "buildTarget": "planner:build:production"
             },
             "development": {
-              "buildTarget": "CurlingRinkManagement.Planner.Portal:build:development"
+              "buildTarget": "planner:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,18 +95,51 @@
               "zone.js",
               "zone.js/testing"
             ],
-            "tsConfig": "tsconfig.spec.json",
+            "tsConfig": "projects/planner/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "projects/planner/public"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "projects/planner/src/styles.scss"
             ],
             "scripts": []
+          }
+        }
+      }
+    },
+    "common-api": {
+      "projectType": "library",
+      "root": "projects/common-api",
+      "sourceRoot": "projects/common-api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/common-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/common-api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/common-api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/common-api/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
           }
         }
       }
