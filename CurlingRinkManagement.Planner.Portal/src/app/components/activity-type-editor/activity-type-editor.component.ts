@@ -4,11 +4,10 @@ import { ActivityTypeModel } from '../../models/activity-type.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-activity-type-editor',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './activity-type-editor.component.html',
-  styleUrl: './activity-type-editor.component.scss'
+    selector: 'app-activity-type-editor',
+    imports: [FormsModule],
+    templateUrl: './activity-type-editor.component.html',
+    styleUrl: './activity-type-editor.component.scss'
 })
 export class ActivityTypeEditorComponent implements OnInit {
 
@@ -20,7 +19,7 @@ export class ActivityTypeEditorComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.activityTypeService.GetAll().subscribe({
+    this.activityTypeService.getAll().subscribe({
       next: (activityTypes) => {
         this.activityTypes = activityTypes;
         this.activityTypes.sort((a, b) => {
@@ -54,9 +53,9 @@ export class ActivityTypeEditorComponent implements OnInit {
     this.activityTypes.forEach(activityType => {
       if (activityType.id == "00000000-0000-0000-0000-000000000000") {
         activityType.id = crypto.randomUUID();
-        this.activityTypeService.Create(activityType).subscribe();
+        this.activityTypeService.create(activityType).subscribe();
       } else {
-        this.activityTypeService.Update(activityType).subscribe();
+        this.activityTypeService.update(activityType).subscribe();
       }
     });
   }

@@ -4,11 +4,11 @@ import { DateTimeInput } from '../../models/date-time-input.model';
 import moment from 'moment';
 
 @Component({
-  selector: 'app-multi-date-select',
-  standalone: true,
-  imports: [FormsModule],
-  templateUrl: './multi-date-select.component.html',
-  styleUrl: './multi-date-select.component.scss'
+    selector: 'app-multi-date-select',
+    standalone:true,
+    imports: [FormsModule],
+    templateUrl: './multi-date-select.component.html',
+    styleUrl: './multi-date-select.component.scss'
 })
 export class MultiDateSelectComponent {
 

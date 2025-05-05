@@ -10,11 +10,11 @@ import { DateTimeInput, dateTimeInputToDates } from '../../models/date-time-inpu
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-sheet-overview',
-  standalone: true,
-  imports: [MultiDateSelectComponent, ReactiveFormsModule],
-  templateUrl: './sheet-overview.component.html',
-  styleUrl: './sheet-overview.component.scss'
+    selector: 'app-sheet-overview',
+    standalone:true,
+    imports: [MultiDateSelectComponent, ReactiveFormsModule],
+    templateUrl: './sheet-overview.component.html',
+    styleUrl: './sheet-overview.component.scss'
 })
 export class SheetOverviewComponent implements OnInit, OnChanges {
   @Input()
@@ -194,7 +194,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     activity.sheetIds = [this.sheet.id];
     console.log(this.isCreating)
     if (this.isCreating) {
-      this.activityService.Create(activity).subscribe({
+      this.activityService.create(activity).subscribe({
         next: a => {
           this.currentEvent = null;
           this.isCreating = false;
@@ -204,7 +204,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
         }
       });
     } else{
-      this.activityService.Update(activity).subscribe({
+      this.activityService.update(activity).subscribe({
         next: a => {
           this.currentEvent = null;
         },

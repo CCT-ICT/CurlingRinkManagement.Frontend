@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-time-overview',
-  standalone: true,
-  imports: [],
-  templateUrl: './time-overview.component.html',
-  styleUrl: './time-overview.component.scss'
+    selector: 'app-time-overview',
+    standalone:true,
+    imports: [],
+    templateUrl: './time-overview.component.html',
+    styleUrl: './time-overview.component.scss'
 })
 export class TimeOverviewComponent {
   public detailInMinutes : number = 60;

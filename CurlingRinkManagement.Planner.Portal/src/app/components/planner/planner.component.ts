@@ -8,11 +8,11 @@ import { TimeOverviewComponent } from '../time-overview/time-overview.component'
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-planner',
-  standalone: true,
-  imports: [ SheetOverviewComponent, TimeOverviewComponent, FormsModule],
-  templateUrl: './planner.component.html',
-  styleUrl: './planner.component.scss'
+    selector: 'app-planner',
+    standalone:true,
+    imports: [FormsModule, SheetOverviewComponent, TimeOverviewComponent],
+    templateUrl: './planner.component.html',
+    styleUrl: './planner.component.scss'
 })
 export class PlannerComponent {
   public sheets: SheetModel[] = [];
@@ -30,13 +30,13 @@ export class PlannerComponent {
   }
 
   private loadActivityTypes() {
-    this.activityTypeService.GetAll().subscribe(a => {
+    this.activityTypeService.getAll().subscribe(a => {
       this.activityTypes = a;
     });
   }
 
   private loadSheets(){
-    this.sheetService.GetAll().subscribe(sheets =>{
+    this.sheetService.getAll().subscribe(sheets =>{
       this.sheets = sheets;
       this.sheets.sort((s1, s2) => s1.order - s2.order)
     })
