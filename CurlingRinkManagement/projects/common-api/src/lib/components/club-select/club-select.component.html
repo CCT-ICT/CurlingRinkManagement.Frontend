@@ -1,9 +1,11 @@
+@if(currentClubName === null || clubs.length > 1){
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="availableClubs" role="button" data-bs-toggle="dropdown"
-        aria-expanded="false">{{currentClubName}}</a>
+        aria-expanded="false">{{currentClubName ?? 'Not selected'}}</a>
     <ul class="dropdown-menu" aria-labelledby="availableClubs">
         @for(club of clubs;track club.id){
         <li><a class="dropdown-item" (click)="this.selectClub(club)">{{club.clubName}}</a></li>
         }
     </ul>
 </li>
+}

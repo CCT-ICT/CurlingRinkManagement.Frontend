@@ -9,20 +9,20 @@ import { Club } from '../../models/club.model';
   styleUrl: './club-select.component.css'
 })
 export class ClubSelectComponent implements OnInit {
-  clubs:Club[] = [];
-  constructor(private clubService:ClubService){}
+  clubs: Club[] = [];
+  constructor(private clubService: ClubService) { }
 
   ngOnInit(): void {
-    this.clubService.getAll().subscribe(clubs =>{
+    this.clubService.getAll().subscribe(clubs => {
       this.clubs = clubs;
     })
   }
 
-  public get currentClubName() : string{
-    return this.clubService.getCurrentClub()?.clubName ?? "Not selected";
+  public get currentClubName(): string | null {
+    return this.clubService.getCurrentClub()?.clubName ?? null;
   }
 
-  public selectClub(club:Club){
+  public selectClub(club: Club) {
     this.clubService.setCurrentClub(club);
   }
 }
