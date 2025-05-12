@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { OAuthService, provideOAuthClient } from 'angular-oauth2-oidc';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { filter } from 'rxjs/operators';
 import { authCodeFlowConfig } from './auth.config';
 import { ClubSelectComponent } from '../../../common-api/src/public-api';
@@ -17,8 +17,7 @@ export class AppComponent {
         this.oauthService.configure(authCodeFlowConfig);
         this.oauthService.loadDiscoveryDocumentAndLogin();
     
-        //this.oauthService.setupAutomaticSilentRefresh();
-    
+        this.oauthService.setupAutomaticSilentRefresh();
         // Automatically load user profile
         this.oauthService.events
           .pipe(filter((e) => e.type === 'token_received'))

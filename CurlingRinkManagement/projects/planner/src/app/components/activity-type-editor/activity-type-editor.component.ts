@@ -4,16 +4,18 @@ import { ActivityTypeModel } from '../../models/activity-type.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-activity-type-editor',
-    imports: [FormsModule],
-    templateUrl: './activity-type-editor.component.html',
-    styleUrl: './activity-type-editor.component.scss'
+  selector: 'app-activity-type-editor',
+  imports: [FormsModule],
+  templateUrl: './activity-type-editor.component.html',
+  styleUrl: './activity-type-editor.component.scss'
 })
 export class ActivityTypeEditorComponent implements OnInit {
 
   public activityTypes: ActivityTypeModel[] = [];
 
   public error: string | null = null;
+  public saveSuccess: boolean = false;
+  public saving: boolean = false;
 
   constructor(private activityTypeService: ActivityTypeService) { }
 
@@ -40,6 +42,7 @@ export class ActivityTypeEditorComponent implements OnInit {
 
   //TODO [BK] Implement actual deletion
   deleteActivityType(index: number) {
+    this.activityTypeService.delete(this.activityTypes[index].id);
     this.activityTypes.splice(index, 1);
   }
 
@@ -50,12 +53,27 @@ export class ActivityTypeEditorComponent implements OnInit {
   }
 
   updateActivityTypes() {
+    this.saving = true;
+    let counter = 0;
+    let total = this.activityTypes.length;
+    let counterIncrease = () => {
+      counter++;
+      this.saveSuccess = counter === total;
+      if (this.saveSuccess) {
+        this.saving = false;
+      }
+    }
+    let counterError = (error: any) => {
+      this.error = "Something went wrong saving";
+      console.log(error);
+      this.saving = false;
+    }
     this.activityTypes.forEach(activityType => {
       if (activityType.id == "00000000-0000-0000-0000-000000000000") {
         activityType.id = crypto.randomUUID();
-        this.activityTypeService.create(activityType).subscribe();
+        this.activityTypeService.create(activityType).subscribe({ next: counterIncrease, error: counterError });
       } else {
-        this.activityTypeService.update(activityType).subscribe();
+        this.activityTypeService.update(activityType).subscribe({ next: counterIncrease, error: counterError });
       }
     });
   }

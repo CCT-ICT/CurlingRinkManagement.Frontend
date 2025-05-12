@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivityTypeModel } from '../models/activity-type.model';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { BaseApiService } from '../../../../common-api/src/public-api';
+import { BaseApiService, ClubService } from '../../../../common-api/src/public-api';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -10,6 +10,6 @@ import { environment } from '../../environments/environment';
 })
 export class ActivityTypeService extends BaseApiService<ActivityTypeModel> {
 
-  constructor(httpClient:HttpClient, oauthService: OAuthService) { super(httpClient, oauthService, "ActivityType", environment.baseApiUrl)}
+  constructor(httpClient:HttpClient, oauthService: OAuthService, clubService:ClubService) { super(httpClient, oauthService, "ActivityType", environment.plannerApiUrl, clubService)}
 
 }
