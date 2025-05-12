@@ -1,22 +1,18 @@
-<div style="width: 100%;">
-  <div style="display: inline-block; width: 5%;">
-  </div>
-  <input type="date" class="form-control" style="display: inline-block; width: 8%;" [(ngModel)]="dateString"
-    id="plannerDate">
-
+<div class="container">
+  <input type="date" class="form-control date-input" [(ngModel)]="dateString" id="plannerDate">
 </div>
 
-<div style="overflow-y: scroll; max-height: 80vh; width:fit-content">
-  <div style="display: inline-block; width: 5vw;position: relative;top:-15px">
+<div class="scroll-container">
+  <div class="time-overview">
     <app-time-overview></app-time-overview>
   </div>
   
-  <div style="display: inline-block;overflow-x:scroll;max-width: 92vw;white-space: nowrap;">
+  <div #sheetsContainer class="sheets-container">
     @for(sheet of sheets; track sheet.id){
-    <div style="display: inline-block; width: 20vw;margin-right: 10px;height: 3vh;">
-       <div>{{sheet.name}}</div>
-      <app-sheet-overview [sheet]="sheet" [activityTypes]="activityTypes" [dayString]="dateString"></app-sheet-overview>
-    </div>
+      <div class="sheet-item">
+        <div>{{sheet.name}}</div>
+        <app-sheet-overview [sheet]="sheet" [activityTypes]="activityTypes" [dayString]="dateString"></app-sheet-overview>
+      </div>
     }
   </div>
 </div>
