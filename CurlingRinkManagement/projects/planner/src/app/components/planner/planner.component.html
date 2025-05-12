@@ -5,21 +5,16 @@
     id="plannerDate">
 
 </div>
-<div style="overflow-x:scroll;max-width: 100vw;white-space: nowrap;">
-  <div style="display: inline-block; width: 5vw;">
-  </div>
-  @for(sheet of sheets; track sheet.id){
-  <div style="display: inline-block; width: 20vw;margin-right: 10px;">
-    <div>{{sheet.name}}</div>
-  </div>
-  }
-  <div style="overflow-y: scroll; max-height: 80vh; width:fit-content">
-    <div style="display: inline-block; width: 5vw;">
-      <app-time-overview></app-time-overview>
-    </div>
 
+<div style="overflow-y: scroll; max-height: 80vh; width:fit-content">
+  <div style="display: inline-block; width: 5vw;position: relative;top:-15px">
+    <app-time-overview></app-time-overview>
+  </div>
+  
+  <div style="display: inline-block;overflow-x:scroll;max-width: 92vw;white-space: nowrap;">
     @for(sheet of sheets; track sheet.id){
-    <div style="display: inline-block; width: 20vw;margin-right: 10px;">
+    <div style="display: inline-block; width: 20vw;margin-right: 10px;height: 3vh;">
+       <div>{{sheet.name}}</div>
       <app-sheet-overview [sheet]="sheet" [activityTypes]="activityTypes" [dayString]="dateString"></app-sheet-overview>
     </div>
     }
