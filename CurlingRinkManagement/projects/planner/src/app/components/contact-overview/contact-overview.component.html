@@ -1,0 +1,35 @@
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Contact Overview</h2>
+        <input type="text" class="form-control w-50" id="searchInput" placeholder="Search contacts..." />
+    </div>
+
+    <div class="row g-3" id="contactList">
+        <!-- Contact Card 1 -->
+        @for (contact of contacts; track $index) {
+        <div class="col-md-4 contact-item">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="mb-1">{{contact.firstName}} {{contact.prefix}} {{contact.lastName}}</h5>
+                        <p class="mb-1 text-muted">{{contact.email}}</p>
+                        <small class="text-muted">{{contact.phoneNumber}}</small>
+                    </div>
+                    <button class="icon-btn toggle-details" title="Show Details">
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                </div>
+                <div class="d-flex gap-1 label-group mt-2">
+                    @for(tag of contact.tags; track $index){
+                    <span class="badge bg-success label-badge">{{tag.title}}</span>
+                    }
+                </div>
+
+                <div class="mt-3 d-none contact-details">
+                    <p class="mb-1"><strong>Aditional:</strong> {{contact.additionalInfo}}</p>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
