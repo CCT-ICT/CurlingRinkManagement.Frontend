@@ -23,7 +23,7 @@ export class AppComponent {
       .pipe(filter((e) => e.type === 'token_received'))
       .subscribe((_) => {
         this.oauthService.loadUserProfile();
-        location.reload();
+        //location.reload();
       });
   }
 

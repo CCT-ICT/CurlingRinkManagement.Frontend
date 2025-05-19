@@ -1,0 +1,52 @@
+@if(error != null){
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+}
+<form [formGroup]="contactForm">
+    <div class="mb-3">
+        <label for="firstName" class="form-label">First name</label>
+        <input type="text" class="form-control" id="firstName" formControlName="firstName">
+        @if (firstName.invalid && (firstName.dirty || firstName.touched)) {
+        <div class="alert alert-danger">
+            @if (firstName.hasError('required')) {
+            <div>
+                First name is required.
+            </div>
+            }
+        </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="prefix" class="form-label">Prefix last name</label>
+        <input type="text" class="form-control" id="prefix" formControlName="prefix">
+    </div>
+    <div class="mb-3">
+        <label for="lastName" class="form-label">Last name</label>
+        <input type="text" class="form-control" id="lastName" formControlName="lastName">
+        @if (lastName.invalid && (lastName.dirty || lastName.touched)) {
+        <div class="alert alert-danger">
+            @if (lastName.hasError('required')) {
+            <div>
+                Last name is required.
+            </div>
+            }
+        </div>
+        }
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">E-Mail</label>
+        <input type="text" class="form-control" id="email" formControlName="email">
+    </div>
+    <div class="mb-3">
+        <label for="phoneNumber" class="form-label">Phone number</label>
+        <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
+    </div>
+
+    <div class="mb-3">
+        <label for="additionalInfo" class="form-label">Additional info</label>
+        <textarea type="text" class="form-control" id="additionalInfo" formControlName="additionalInfo"></textarea>
+    </div>
+    <button class="btn btn-success" (click)="save()">Save</button>
+    <button class="btn btn-secondary" (click)="exit.emit()">Cancel</button>
+</form>

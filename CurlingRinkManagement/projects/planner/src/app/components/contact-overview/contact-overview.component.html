@@ -1,6 +1,7 @@
 <div class="container py-5">
+    <h2>Contact Overview</h2>
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Contact Overview</h2>
+        <button class="btn btn-primary" (click)="showContactModal = true">New contact</button>
         <input type="text" class="form-control w-50" id="searchInput" placeholder="Search contacts..." />
     </div>
 
@@ -15,7 +16,7 @@
                         <p class="mb-1 text-muted">{{contact.email}}</p>
                         <small class="text-muted">{{contact.phoneNumber}}</small>
                     </div>
-                    <button class="icon-btn toggle-details" title="Show Details">
+                    <button class="icon-btn toggle-details" title="Show Details" (click)="expend(contact.id)">
                         <i class="bi bi-chevron-down"></i>
                     </button>
                 </div>
@@ -24,12 +25,29 @@
                     <span class="badge bg-success label-badge">{{tag.title}}</span>
                     }
                 </div>
-
-                <div class="mt-3 d-none contact-details">
-                    <p class="mb-1"><strong>Aditional:</strong> {{contact.additionalInfo}}</p>
+                @if(expended === contact.id){
+                <div class="mt-3 contact-details">
+                    <p class="mb-1"><strong>Additional:</strong> {{contact.additionalInfo}}</p>
                 </div>
+                }
             </div>
         </div>
         }
     </div>
 </div>
+@if(showContactModal){
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if(contactToEdit === null){<h5 class="modal-title">New contact</h5>}
+                @else{<h5 class="modal-title">Edit contact</h5>}
+            </div>
+            <div class="modal-body">
+                <app-contact-editor [selectedContact]="contactToEdit" (successfulAction)="contactEdited($event)"
+                    (exit)="showContactModal = false"></app-contact-editor>
+            </div>
+        </div>
+    </div>
+</div>
+}
