@@ -37,7 +37,8 @@ export class ContactOverviewComponent implements OnInit {
     }
     else{
       let index = this.contacts.indexOf(this.contactToEdit);
-      this.contacts[index] = contact;      
+      this.contacts[index] = contact;  
+      this.contactToEdit = null;    
     }
     this.showContactModal = false;
   }
