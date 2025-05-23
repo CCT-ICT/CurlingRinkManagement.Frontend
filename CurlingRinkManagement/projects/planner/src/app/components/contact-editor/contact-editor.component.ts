@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContactModel } from '../../models/contact-model';
 import { ContactService } from '../../services/contact.service';
@@ -9,11 +9,13 @@ import { ContactService } from '../../services/contact.service';
   templateUrl: './contact-editor.component.html',
   styleUrl: './contact-editor.component.scss'
 })
-export class ContactEditorComponent {
+export class ContactEditorComponent implements OnChanges {
   @Output()
   public successfulAction = new EventEmitter<ContactModel>();
-    @Output()
+
+  @Output()
   public exit = new EventEmitter();
+
   @Input()
   public selectedContact: ContactModel | null = null;
 
@@ -32,6 +34,33 @@ export class ContactEditorComponent {
 
   constructor(private contactService: ContactService) { }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedContact']) {
+      this.populateForm();
+    }
+  }
+
+  private populateForm(): void {
+    if (this.selectedContact) {
+      // Fill form with selected contact data
+      this.contactForm.patchValue({
+        firstName: this.selectedContact.firstName || '',
+        prefix: this.selectedContact.prefix || '',
+        lastName: this.selectedContact.lastName || '',
+        email: this.selectedContact.email || '',
+        phoneNumber: this.selectedContact.phoneNumber || '',
+        additionalInfo: this.selectedContact.additionalInfo || ''
+      });
+    } else {
+      // Reset form when no contact is selected
+      this.contactForm.reset();
+    }
+
+    // Reset form state
+    this.submitted = false;
+    this.error = null;
+  }
+
   save() {
     this.submitted = true;
     if (this.contactForm.invalid) return;
@@ -40,15 +69,16 @@ export class ContactEditorComponent {
     contact.id = this.selectedContact?.id ?? crypto.randomUUID();
     contact.dateAdded = this.selectedContact?.dateAdded ?? new Date();
     contact.firstName = form.firstName!;
-    contact.prefix = form.prefix!;
-    contact.email = form.email!;
-    contact.phoneNumber = form.phoneNumber!;
-    contact.additionalInfo = form.additionalInfo!;
+    contact.prefix = form.prefix!?? '';
+    contact.lastName = form.lastName!;
+    contact.email = form.email ?? '';
+    contact.phoneNumber = form.phoneNumber ?? '';
+    contact.additionalInfo = form.additionalInfo ?? '';
     contact.clubId = crypto.randomUUID();
     if (this.selectedContact === null) {
       this.contactService.create(contact).subscribe(this.subscriptionHandler);
     } else {
-      this.contactService.create(contact).subscribe(this.subscriptionHandler);
+      this.contactService.update(contact).subscribe(this.subscriptionHandler);
     }
   }
 
