@@ -8,11 +8,12 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <ul class="navbar-nav">
         <li class="nav-item"><a class="nav-link active" aria-current="page" routerLink="/planning">Planning</a>
+        <li class="nav-item"><a class="nav-link" routerLink="/requests">Requests</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/contacts">Contacts</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/settings">Settings</a></li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="loginOptions" role="button"
-            data-bs-toggle="dropdown" aria-expanded="false">{{this.userName ?? ''}}</a>
+          <a class="nav-link dropdown-toggle" href="#" id="loginOptions" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">{{this.userName ?? ''}}</a>
           <ul class="dropdown-menu" aria-labelledby="loginOptions">
             <li><a class="dropdown-item" (click)="this.logout()">Logout</a></li>
           </ul>

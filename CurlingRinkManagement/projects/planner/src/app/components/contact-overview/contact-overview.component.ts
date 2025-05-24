@@ -3,35 +3,32 @@ import { ContactModel } from '../../models/contact-model';
 import { ContactEditorComponent } from "../contact-editor/contact-editor.component";
 import { ContactService } from '../../services/contact.service';
 import { FormsModule } from '@angular/forms';
+import { BasePaginationPageComponent } from '../../../../../common-api/src/public-api';
+import { PaginationControlsComponent } from "../../../../../common-api/src/lib/components/pagination-controls/pagination-controls.component";
 
 @Component({
   selector: 'app-contact-overview',
-  imports: [ContactEditorComponent, FormsModule],
+  imports: [ContactEditorComponent, FormsModule, PaginationControlsComponent],
   templateUrl: './contact-overview.component.html',
   styleUrl: './contact-overview.component.scss'
 })
-export class ContactOverviewComponent implements OnInit {
+export class ContactOverviewComponent extends BasePaginationPageComponent implements OnInit {
   public contacts: ContactModel[] = [];
 
   public expended: string | null = null;
   public showContactModal: boolean = false;
   public contactToEdit: ContactModel | null = null;
-
-
-  // Pagination properties
-  public currentPage: number = 1;
-  public pageSize: number = 3 * 6;
-  public totalAmount: number = 0;
   public searchText: string = '';
 
-  constructor(private contactService: ContactService) { }
+
+  constructor(private contactService: ContactService) { super() }
 
   ngOnInit(): void {
-    this.loadContacts();
+    this.loadEntities();
     this.loadAmount();
   }
-
-  private loadContacts() {
+  
+  override loadEntities(): void {
     let filters: string[] | null = null;
     let filterValues: string[] | null = null;
     if (this.searchText.length > 0) {
@@ -42,6 +39,7 @@ export class ContactOverviewComponent implements OnInit {
       this.contacts = contacts;
     })
   }
+
   private loadAmount() {
     let filters: string[] | null = null;
     let filterValues: string[] | null = null;
@@ -55,7 +53,7 @@ export class ContactOverviewComponent implements OnInit {
   }
 
   public search() {
-    this.loadContacts();
+    this.loadEntities();
     this.loadAmount();
   }
 
@@ -84,52 +82,9 @@ export class ContactOverviewComponent implements OnInit {
     this.contactToEdit = contact;
   }
 
-
-  // Pagination methods
-  getTotalPages(): number {
-    return Math.ceil(this.totalAmount / this.pageSize);
+  public currentPageChange(newPage:number) {
+    this.loadEntities();
+    this.currentPage = newPage;
   }
 
-  getStartIndex(): number {
-    return (this.currentPage - 1) * this.pageSize;
-  }
-
-  getEndIndex(): number {
-    const endIndex = this.currentPage * this.pageSize;
-    return Math.min(endIndex, this.totalAmount);
-  }
-
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.getTotalPages()) {
-      this.currentPage = page;
-      this.loadContacts();
-    }
-  }
-
-  onPageSizeChange(): void {
-    this.currentPage = 1; // Reset to first page when changing page size
-  }
-
-  getVisiblePages(): number[] {
-    const totalPages = this.getTotalPages();
-    const current = this.currentPage;
-    const pages: number[] = [];
-
-    if (totalPages <= 7) {
-      // Show all pages if total is 7 or less
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      // Show pages around current page
-      const start = Math.max(1, current - 2);
-      const end = Math.min(totalPages, current + 2);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-    }
-
-    return pages;
-  }
 }

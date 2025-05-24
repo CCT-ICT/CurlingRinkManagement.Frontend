@@ -1,0 +1,49 @@
+.label-badge {
+    font-size: 0.9rem;
+    padding: 0.25em 0.5em;
+    border-radius: 0.5rem;
+    margin: 0.1rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #0d6efd;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.badge-conversationstarted {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #1565c0;
+}
+
+.badge-dateinoption {
+    background: linear-gradient(135deg, #fff3e0, #ffcc02);
+    color: #e65100;
+}
+
+.badge-dateconfirmed {
+    background: linear-gradient(135deg, #e8f5e8, #a5d6a7);
+    color: #2e7d32;
+}
+
+.badge-invoicesent {
+    background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+    color: #6a1b9a;
+}
+
+.badge-paymentreceived {
+    background: linear-gradient(135deg, #e0f2f1, #80cbc4);
+    color: #00695c;
+}
+
+.badge-completed {
+    background: linear-gradient(135deg, #e8f5e8, #81c784);
+    color: #1b5e20;
+}
+
+.badge-cancelled {
+    background: linear-gradient(135deg, #ffebee, #ffcdd2);
+    color: #c62828;
+}
