@@ -1,15 +1,9 @@
-@if(error != null){
-<div class="alert alert-danger" role="alert">
-    An unexpected error occured: {{error}}
-</div>
-}
-
 <div class="card">
     <div class="card-header">
-        Activity types
+        Sheets
     </div>
-    <button class="btn btn-success" (click)="updateActivityTypes()">Save</button>
     <div class="card-body">
+        <button [disabled]="saving" class="btn btn-success" (click)="updateActivityTypes()">Save</button>
         @for(activityType of activityTypes; track activityType; let i = $index){
         <div class="card">
             <div class="card-body">
@@ -46,6 +40,18 @@
             </div>
         </div>
         }
-        <button type="button" class="btn btn-success" (click)="addActivityType()"><i class="fa-solid fa-plus"></i></button>
+        <button type="button" class="btn btn-success" (click)="addActivityType()"><i
+                class="fa-solid fa-plus"></i></button>
+        @if(error != null){
+        <div class="alert alert-danger" role="alert">
+            An unexpected error occured: {{error}}
+        </div>
+        }
+
+        @if(saveSuccess){
+        <div class="alert alert-success" role="alert">
+            Saved
+        </div>
+        }
     </div>
 </div>

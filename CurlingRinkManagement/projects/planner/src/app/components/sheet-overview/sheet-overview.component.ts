@@ -90,7 +90,6 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
 
   getColor(event : EventModel){
     let activityType = this.activityTypes.find(a => a.id == event.activity?.activityTypeId) ;
-    console.log(activityType)
     return activityType?.color ?? "aqua";
   }
 

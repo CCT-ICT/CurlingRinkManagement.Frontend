@@ -1,0 +1,39 @@
+.container {
+  width: 100%;
+}
+
+.left-space {
+  display: inline-block;
+  width: 5%;
+}
+
+.date-input {
+  display: inline-block;
+  width: 8%;
+}
+
+.scroll-container {
+  overflow-y: scroll;
+  max-height: 80vh;
+  width: fit-content;
+}
+
+.time-overview {
+  display: inline-block;
+  width: 5vw;
+
+}
+
+.sheets-container {
+  display: inline-block;
+  overflow-x: auto;
+  max-width: 92vw;
+  white-space: nowrap;
+}
+
+.sheet-item {
+  display: inline-block;
+  width: 14vw;
+  margin-right: 10px;
+  height: 3vh;
+}
