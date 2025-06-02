@@ -3,10 +3,12 @@ import { BasePaginationPageComponent } from '../../../../../common-api/src/publi
 import { CustomerRequest, CustomerRequestState } from '../../models/customer-request.model';
 import { ContactModel } from '../../models/contact-model';
 import { PaginationControlsComponent } from "../../../../../common-api/src/lib/components/pagination-controls/pagination-controls.component";
+import { CustomerRequestService } from '../../services/customer-request.service';
+import { RequestEditorComponent } from "../request-editor/request-editor.component";
 
 @Component({
   selector: 'app-request-overview',
-  imports: [PaginationControlsComponent],
+  imports: [PaginationControlsComponent, RequestEditorComponent],
   templateUrl: './request-overview.component.html',
   styleUrl: './request-overview.component.scss'
 })
@@ -25,7 +27,7 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
       customerRequestState: CustomerRequestState.DateInOption,
       contactId: '1'
     },
-        {
+    {
       id: '',
       clubId: '',
       title: 'Bedrijfsfeestje',
@@ -36,7 +38,7 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
       customerRequestState: CustomerRequestState.ConversationStarted,
       contactId: '1'
     },
-        {
+    {
       id: '',
       clubId: '',
       title: 'Teamuitje',
@@ -47,7 +49,7 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
       customerRequestState: CustomerRequestState.DateConfirmed,
       contactId: '1'
     },
-        {
+    {
       id: '',
       clubId: '',
       title: 'Cursus',
@@ -58,7 +60,7 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
       customerRequestState: CustomerRequestState.PaymentReceived,
       contactId: '1'
     },
-        {
+    {
       id: '',
       clubId: '',
       title: 'Groepsuitje',
@@ -73,29 +75,34 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
 
   public contacts: Map<string, ContactModel> = new Map<string, ContactModel>([
     [
-    '1',
-    {
-      id: '1',
-      clubId: '',
-      firstName: 'Bart',
-      prefix: '',
-      lastName: 'Klomp',
-      email: 'bartpklomp@gmail.com',
-      phoneNumber: '',
-      additionalInfo: '',
-      dateAdded: new Date(),
-      tags: [],
-    }]
+      '1',
+      {
+        id: '1',
+        clubId: '',
+        firstName: 'Bart',
+        prefix: '',
+        lastName: 'Klomp',
+        email: 'bartpklomp@gmail.com',
+        phoneNumber: '',
+        additionalInfo: '',
+        dateAdded: new Date(),
+        tags: [],
+      }]
   ]);
 
   public expended: string | null = null;
-  public showContactModal: boolean = false;
+  public showRequestModal: boolean = false;
   public requestToEdit: CustomerRequest | null = null;
   public searchText: string = '';
 
-  override loadEntities(): void {
+  constructor(private customerRequestService: CustomerRequestService) { super() }
 
+  override loadEntities(): void {
+    this.customerRequestService.getAll(this.currentPage, this.pageSize).subscribe(requests => {
+      this.requests = requests;
+    })
   }
+
   ngOnInit(): void {
 
   }
@@ -108,7 +115,8 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
   }
 
   editRequest(request: CustomerRequest) {
-    throw new Error('Method not implemented.');
+    this.showRequestModal = true
+    this.requestToEdit = request;
   }
 
   public expend(id: string) {
@@ -125,5 +133,10 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
 
   public getEnumString(request: CustomerRequest) {
     return CustomerRequestState[request.customerRequestState]
+  }
+
+  public resetForm() {
+    this.showRequestModal = false;
+    this.requestToEdit = null;
   }
 }

@@ -1,0 +1,112 @@
+@if(error != null){
+<div class="alert alert-danger" role="alert">
+    {{error}}
+</div>
+}
+<form [formGroup]="requestForm">
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" formControlName="title" placeholder="Enter optional title">
+    </div>
+
+    <!-- Amount of People Field -->
+    <div class="mb-3">
+        <label for="amountOfPeople" class="form-label">Amount of People</label>
+        <input type="number" class="form-control" id="amountOfPeople" name="amountOfPeople" min="0">
+    </div>
+
+    <!-- Additional Info Field -->
+    <div class="mb-3">
+        <label for="additionalInfo" class="form-label">Additional Information</label>
+        <textarea class="form-control" id="additionalInfo" formControlName="additionalInfo" rows="4"
+            placeholder="Enter any additional information..."></textarea>
+    </div>
+
+    <div class="mb-3">
+        <input [checked]="showCustomPrice" (change)="showCustomPrice = !showCustomPrice" class="form-check-input"
+            type="checkbox" id="customPriceCheck" name="customPriceCheck">
+        <label for="customPriceCheck" class="form-check-label"> Custom Price?</label>
+    </div>
+    @if(showCustomPrice){
+    <!-- Custom Price Reason Field -->
+    <div class="mb-3">
+        <label for="customPriceReason" class="form-label">Custom Price Reason</label>
+        <input type="text" class="form-control" id="customPriceReason" formControlName="customPriceReason"
+            placeholder="Reason for custom pricing">
+    </div>
+
+    <!-- Custom Price Field -->
+    <div class="mb-3">
+        <label for="customPrice" class="form-label">Custom Price</label>
+        <div class="input-group">
+            <span class="input-group-text">€</span>
+            <input type="number" class="form-control" id="customPrice" formControlName="customPrice" step="0.01" min="0"
+                placeholder="0.00">
+        </div>
+    </div>
+    }
+
+    <!-- Customer Request State Field -->
+    <div class="mb-4">
+        <label class="form-label">Customer Request State <span class="text-danger">*</span></label>
+        <div class="state-flow">
+            <!-- Main Flow -->
+            <div class="state-button" [class.selected]="currentState === customerRequestState.ConversationStarted"
+                (click)="currentState = customerRequestState.ConversationStarted" data-state="ConversationStarted">
+                <i class="bi bi-chat-dots state-icon"></i>
+                <div class="state-label">Conversation<br>Started</div>
+            </div>
+            <i class="bi bi-arrow-right flow-arrow"></i>
+
+            <div class="state-button" [class.selected]="currentState === customerRequestState.DateInOption"
+                (click)="currentState = customerRequestState.DateInOption" data-state="DateInOption">
+                <i class="bi bi-calendar-check state-icon"></i>
+                <div class="state-label">Date In<br>Option</div>
+            </div>
+            <i class="bi bi-arrow-right flow-arrow"></i>
+
+            <div class="state-button" [class.selected]="currentState === customerRequestState.DateConfirmed"
+                (click)="currentState = customerRequestState.DateConfirmed" data-state="DateConfirmed">
+                <i class="bi bi-calendar-event state-icon"></i>
+                <div class="state-label">Date<br>Confirmed</div>
+            </div>
+            <i class="bi bi-arrow-right flow-arrow"></i>
+
+            <div class="state-button" [class.selected]="currentState == customerRequestState.InvoiceSent"
+                (click)="currentState = customerRequestState.InvoiceSent" data-state="InvoiceSent">
+                <i class="bi bi-receipt state-icon"></i>
+                <div class="state-label">Invoice<br>Sent</div>
+            </div>
+            <i class="bi bi-arrow-right flow-arrow"></i>
+
+            <div class="state-button" [class.selected]="currentState == customerRequestState.PaymentReceived"
+                (click)="currentState = customerRequestState.PaymentReceived" data-state="PaymentReceived">
+                <i class="bi bi-credit-card state-icon"></i>
+                <div class="state-label">Payment<br>Received</div>
+            </div>
+            <i class="bi bi-arrow-right flow-arrow"></i>
+
+            <div class="state-button" [class.selected]="currentState == customerRequestState.Completed"
+                (click)="currentState = customerRequestState.Completed" data-state="Completed">
+                <i class="bi bi-check-circle state-icon"></i>
+                <div class="state-label">Completed<br><br></div>
+            </div>
+        </div>
+
+        <!-- Cancelled State (separate from main flow) -->
+        <div class="text-center mt-3">
+            <div class="state-button" [class.selected]="currentState == customerRequestState.Cancled"
+                (click)="currentState = customerRequestState.Cancled" data-state="Cancelled">
+                <i class="bi bi-x-circle state-icon"></i>
+                <div class="state-label">Cancelled</div>
+            </div>
+        </div>
+
+        <input type="hidden" id="customerRequestState" name="customerRequestState" required>
+        <div class="invalid-feedback d-block" id="stateError" style="display: none !important;">
+            Please select a customer request state.
+        </div>
+    </div>
+    <button class="btn btn-success" (click)="save()">Save</button>
+    <button class="btn btn-secondary" (click)="exit.emit()">Cancel</button>
+</form>

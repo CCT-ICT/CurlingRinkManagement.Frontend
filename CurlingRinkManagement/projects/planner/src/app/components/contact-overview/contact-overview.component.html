@@ -64,7 +64,7 @@
             </div>
             <div class="modal-body">
                 <app-contact-editor [selectedContact]="contactToEdit" (successfulAction)="contactEdited($event)"
-                    (exit)="showContactModal = false"></app-contact-editor>
+                    (exit)="resetForm()"></app-contact-editor>
             </div>
         </div>
     </div>

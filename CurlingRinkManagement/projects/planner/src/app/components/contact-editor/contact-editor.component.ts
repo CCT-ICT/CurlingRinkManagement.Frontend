@@ -26,7 +26,7 @@ export class ContactEditorComponent implements OnChanges {
   public contactForm = this.formBuilder.nonNullable.group({
     firstName: new FormControl('', Validators.required),
     prefix: new FormControl(''),
-    lastName: new FormControl('', Validators.required),
+    lastName: new FormControl(''),
     email: new FormControl(''),
     phoneNumber: new FormControl(''),
     additionalInfo: new FormControl('')

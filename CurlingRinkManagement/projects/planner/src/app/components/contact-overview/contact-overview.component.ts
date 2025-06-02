@@ -87,4 +87,9 @@ export class ContactOverviewComponent extends BasePaginationPageComponent implem
     this.currentPage = newPage;
   }
 
+
+  public resetForm(){
+    this.showContactModal = false;
+    this.contactToEdit = null;
+  }
 }
