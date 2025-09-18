@@ -14,7 +14,7 @@ export class ActivityService extends BaseApiService<ActivityModel> {
   constructor(httpClient:HttpClient, oauthService: OAuthService, clubService:ClubService) { super(httpClient, oauthService, "Activity", environment.plannerApiUrl, clubService)}
 
   public getInRange(sheetId:string, start:Date, end:Date) : Observable<ActivityModel[]>{
-    return this.httpClient.get<ActivityModel[]>(`${environment.baseApiUrl}/Api/${this.endpoint}/${sheetId}?start=${start.toJSON()}&end=${end.toJSON()}`, { headers: this.getHeaders() })
+    return this.httpClient.get<ActivityModel[]>(`${environment.plannerApiUrl}/Api/${this.endpoint}/${sheetId}?start=${start.toJSON()}&end=${end.toJSON()}`, { headers: this.getHeaders() })
       .pipe(
         map(activities =>{
           activities.forEach(a =>{

@@ -8,7 +8,8 @@ export class CustomerRequest {
     customPriceReason: string | null = null;
     customPrice: number | null = null;
     customerRequestState: CustomerRequestState = CustomerRequestState.ConversationStarted;
-    contactId:string | null = null;
+    contactId:string = '';
+    activityId:string | null = null;
 }
 
 export enum CustomerRequestState {

@@ -18,10 +18,15 @@ export class BaseApiService<T> {
         return this.httpClient.get<T[]>(`${this.apiBase}/Api/${this.endpoint}`, { headers: this.getHeaders(), params: params });
     }
 
+    public getById(id:string): Observable<T> {
+
+        return this.httpClient.get<T>(`${this.apiBase}/Api/${this.endpoint}/${id}`, { headers: this.getHeaders()});
+    }
+
     public getAmount(filters: string[] | null = null, filterValues: string[] | null = null): Observable<number> {
         let params = new HttpParams();
         params = this.addFiltersToParams(params, filters, filterValues);
-        return this.httpClient.get<number>(`${this.apiBase}/Api/${this.endpoint}/Amount`, { headers: this.getHeaders(), params:params });
+        return this.httpClient.get<number>(`${this.apiBase}/Api/${this.endpoint}/Amount`, { headers: this.getHeaders(), params: params });
     }
 
 

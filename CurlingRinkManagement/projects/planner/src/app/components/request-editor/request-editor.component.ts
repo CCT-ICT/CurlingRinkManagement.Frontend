@@ -2,10 +2,13 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { CustomerRequest, CustomerRequestState } from '../../models/customer-request.model';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomerRequestService } from '../../services/customer-request.service';
+import { ContactSelectorComponent } from "../contact-selector/contact-selector.component";
+import { ContactModel } from '../../models/contact-model';
+import { ContactService } from '../../services/contact.service';
 
 @Component({
   selector: 'app-request-editor',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ContactSelectorComponent],
   templateUrl: './request-editor.component.html',
   styleUrl: './request-editor.component.scss'
 })
@@ -33,7 +36,9 @@ export class RequestEditorComponent implements OnChanges {
   public currentState: CustomerRequestState = CustomerRequestState.ConversationStarted;
   public showCustomPrice: boolean = false;
 
-  constructor(private requestService: CustomerRequestService) { }
+  public selectedContact: ContactModel | null = null;
+
+  constructor(private requestService: CustomerRequestService, private contactService: ContactService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedRequest']) {
@@ -53,8 +58,9 @@ export class RequestEditorComponent implements OnChanges {
       });
       this.currentState = this.selectedRequest.customerRequestState;
       this.showCustomPrice = this.selectedRequest.customPrice !== null && this.selectedRequest.customPrice > -1;
+      this.contactService.getById(this.selectedRequest.contactId).subscribe((contact) => this.selectedContact = contact)
     } else {
-      // Reset form when no contact is selected
+      // Reset form when no request is selected
       this.requestForm.reset();
     }
 
@@ -65,7 +71,7 @@ export class RequestEditorComponent implements OnChanges {
 
   save() {
     this.submitted = true;
-    if (this.requestForm.invalid) return;
+    if (this.requestForm.invalid || this.selectedContact == null) return;
     let form = this.requestForm.value;
     let request = new CustomerRequest();
     request.id = this.selectedRequest?.id ?? crypto.randomUUID();
@@ -84,7 +90,7 @@ export class RequestEditorComponent implements OnChanges {
     }
     request.customerRequestState = this.currentState ?? 0;
 
-    //request.contactId = ????
+    request.contactId = this.selectedContact.id
 
     if (this.selectedRequest === null) {
       this.requestService.create(request).subscribe(this.subscriptionHandler);

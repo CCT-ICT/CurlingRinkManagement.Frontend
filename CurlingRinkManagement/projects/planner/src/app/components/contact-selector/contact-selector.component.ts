@@ -1,0 +1,67 @@
+import { Component, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
+import { debounceTime, filter, fromEvent, map } from 'rxjs';
+import { ContactService } from '../../services/contact.service';
+import { ContactModel } from '../../models/contact-model';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-contact-selector',
+  imports: [FormsModule],
+  templateUrl: './contact-selector.component.html',
+  styleUrl: './contact-selector.component.scss'
+})
+export class ContactSelectorComponent implements OnInit {
+
+  public contacts: ContactModel[] = [];
+
+  @Input()
+  public selectedContact: ContactModel | null = null;
+  @Output()
+  public selectedContactChange: EventEmitter<ContactModel | null> = new EventEmitter();
+
+  public searchtext: string = "";
+
+
+  constructor(private contactService: ContactService) { }
+
+  ngOnInit(): void {
+    // elem ref
+    const searchBox = document.getElementById('searchBox');
+    if (searchBox === null) return;
+    // streams
+    const keyup$ = fromEvent(searchBox, 'keyup')
+
+    // wait .5s between keyups to emit current value
+    keyup$.pipe(
+      map((i: any) => i.currentTarget.value),
+      debounceTime(200)
+    )
+      .subscribe((value: any) => {
+        this.searchContacts(value);
+      });
+  }
+
+
+  private searchContacts(searchText: string) {
+    console.log("start searching")
+    if (searchText === null || searchText === "" || searchText.replaceAll(" ", "") === "") {
+      this.contacts = [];
+      return;
+    }
+    this.contactService.getAll(null, 5, ["Generic"], [searchText]).subscribe((contacts) => {
+      this.contacts = contacts;
+    });
+  }
+
+  public selectContact(contact: ContactModel) {
+    this.selectedContact = contact;
+    this.selectedContactChange.emit(this.selectedContact);
+    this.searchtext = contact.firstName + " " + contact.prefix + " " + contact.lastName
+  }
+
+  public clearSelection() {
+    this.selectedContact = null;
+    this.selectedContactChange.emit(this.selectedContact);
+    this.searchtext = "";
+  }
+}

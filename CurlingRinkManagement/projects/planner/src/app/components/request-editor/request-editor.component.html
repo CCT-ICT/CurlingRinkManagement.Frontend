@@ -5,6 +5,17 @@
 }
 <form [formGroup]="requestForm">
     <div class="mb-3">
+        <label for="title" class="form-label">Contact</label>
+        <app-contact-selector [(selectedContact)]="selectedContact" />
+        @if(selectedContact == null && submitted){
+        <div class="alert alert-danger">
+            <div>
+                Contact is required.
+            </div>
+        </div>
+        }
+    </div>
+    <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input type="text" class="form-control" id="title" formControlName="title" placeholder="Enter optional title">
     </div>

@@ -1,0 +1,30 @@
+<div class="dropdown">
+    @if(selectedContact) {
+    <!-- Selected contact display -->
+    <div class="form-control d-flex align-items-center justify-content-between">
+        <span class="badge bg-primary d-flex align-items-center">
+            {{selectedContact.firstName}} {{selectedContact.prefix}} {{selectedContact.lastName}}
+            <button type="button" class="btn-close btn-close-white ms-2" (click)="clearSelection()"
+                aria-label="Remove contact"></button>
+        </span>
+    </div>
+    }
+    <!-- Regular search input -->
+    <input id="searchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+        [(ngModel)]="searchtext" [style.display]="selectedContact? 'none':'block'" placeholder="Search contacts...">
+
+
+    <ul class="dropdown-menu" aria-labelledby="searchBox">
+        @if(contacts.length == 0){
+        <li><span class="dropdown-text">No contacts found (Start typing to try get a new match)</span></li>
+        }
+        @for(contact of contacts; track contact.id){
+        <li><span class="dropdown-item" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
+                {{contact.lastName}}</span></li>
+        }
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        <li><span class="dropdown-item">New contact</span></li>
+    </ul>
+</div>

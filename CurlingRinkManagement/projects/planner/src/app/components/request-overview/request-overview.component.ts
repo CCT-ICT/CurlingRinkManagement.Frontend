@@ -5,6 +5,7 @@ import { ContactModel } from '../../models/contact-model';
 import { PaginationControlsComponent } from "../../../../../common-api/src/lib/components/pagination-controls/pagination-controls.component";
 import { CustomerRequestService } from '../../services/customer-request.service';
 import { RequestEditorComponent } from "../request-editor/request-editor.component";
+import { ContactService } from '../../services/contact.service';
 
 @Component({
   selector: 'app-request-overview',
@@ -16,78 +17,9 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
 
 
   public requests: CustomerRequest[] = [
-    {
-      id: '',
-      clubId: '',
-      title: 'Groepsuitje',
-      amountOfPeople: 0,
-      additionalInfo: '',
-      customPriceReason: null,
-      customPrice: null,
-      customerRequestState: CustomerRequestState.DateInOption,
-      contactId: '1'
-    },
-    {
-      id: '',
-      clubId: '',
-      title: 'Bedrijfsfeestje',
-      amountOfPeople: 0,
-      additionalInfo: '',
-      customPriceReason: null,
-      customPrice: null,
-      customerRequestState: CustomerRequestState.ConversationStarted,
-      contactId: '1'
-    },
-    {
-      id: '',
-      clubId: '',
-      title: 'Teamuitje',
-      amountOfPeople: 0,
-      additionalInfo: '',
-      customPriceReason: null,
-      customPrice: null,
-      customerRequestState: CustomerRequestState.DateConfirmed,
-      contactId: '1'
-    },
-    {
-      id: '',
-      clubId: '',
-      title: 'Cursus',
-      amountOfPeople: 0,
-      additionalInfo: '',
-      customPriceReason: null,
-      customPrice: null,
-      customerRequestState: CustomerRequestState.PaymentReceived,
-      contactId: '1'
-    },
-    {
-      id: '',
-      clubId: '',
-      title: 'Groepsuitje',
-      amountOfPeople: 0,
-      additionalInfo: '',
-      customPriceReason: null,
-      customPrice: null,
-      customerRequestState: CustomerRequestState.Completed,
-      contactId: '1'
-    }
   ];
 
   public contacts: Map<string, ContactModel> = new Map<string, ContactModel>([
-    [
-      '1',
-      {
-        id: '1',
-        clubId: '',
-        firstName: 'Bart',
-        prefix: '',
-        lastName: 'Klomp',
-        email: 'bartpklomp@gmail.com',
-        phoneNumber: '',
-        additionalInfo: '',
-        dateAdded: new Date(),
-        tags: [],
-      }]
   ]);
 
   public expended: string | null = null;
@@ -95,16 +27,20 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
   public requestToEdit: CustomerRequest | null = null;
   public searchText: string = '';
 
-  constructor(private customerRequestService: CustomerRequestService) { super() }
+  constructor(private customerRequestService: CustomerRequestService, private contactService: ContactService) { super() }
 
   override loadEntities(): void {
     this.customerRequestService.getAll(this.currentPage, this.pageSize).subscribe(requests => {
       this.requests = requests;
+      var contactIds = [... new Set(this.requests.map(r => r.contactId))];
+      contactIds.forEach(id => {
+        this.contactService.getById(id).subscribe(contact => this.contacts.set(id, contact));
+      });
     })
   }
 
   ngOnInit(): void {
-
+    this.loadEntities();
   }
 
   getContact(id: string | null): ContactModel | undefined {
@@ -117,6 +53,14 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
   editRequest(request: CustomerRequest) {
     this.showRequestModal = true
     this.requestToEdit = request;
+  }
+
+  requestEdited(request: CustomerRequest) {
+    this.showRequestModal = false
+    if(this.requestToEdit == null) return;
+    var index = this.requests.indexOf(this.requestToEdit);
+    this.requests[index] = request;
+    this.requestToEdit = null;
   }
 
   public expend(id: string) {
