@@ -3,10 +3,11 @@ import { debounceTime, filter, fromEvent, map } from 'rxjs';
 import { ContactService } from '../../services/contact.service';
 import { ContactModel } from '../../models/contact-model';
 import { FormsModule } from '@angular/forms';
+import { ContactEditorComponent } from "../contact-editor/contact-editor.component";
 
 @Component({
   selector: 'app-contact-selector',
-  imports: [FormsModule],
+  imports: [FormsModule, ContactEditorComponent],
   templateUrl: './contact-selector.component.html',
   styleUrl: './contact-selector.component.scss'
 })
@@ -21,6 +22,7 @@ export class ContactSelectorComponent implements OnInit {
 
   public searchtext: string = "";
 
+  public showContactCreation: boolean = false;
 
   constructor(private contactService: ContactService) { }
 
@@ -63,5 +65,14 @@ export class ContactSelectorComponent implements OnInit {
     this.selectedContact = null;
     this.selectedContactChange.emit(this.selectedContact);
     this.searchtext = "";
+  }
+
+  public contactCreated(contactModel: ContactModel){
+    this.selectedContact = contactModel;
+    this.showContactCreation = false;
+  }
+
+  public addNewContact(){
+    this.showContactCreation = true;
   }
 }

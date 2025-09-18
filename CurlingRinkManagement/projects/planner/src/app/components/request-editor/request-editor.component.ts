@@ -5,6 +5,7 @@ import { CustomerRequestService } from '../../services/customer-request.service'
 import { ContactSelectorComponent } from "../contact-selector/contact-selector.component";
 import { ContactModel } from '../../models/contact-model';
 import { ContactService } from '../../services/contact.service';
+import { ContactEditorComponent } from "../contact-editor/contact-editor.component";
 
 @Component({
   selector: 'app-request-editor',
@@ -21,7 +22,6 @@ export class RequestEditorComponent implements OnChanges {
 
   @Input()
   public selectedRequest: CustomerRequest | null = null;
-
   public error: string | null = null;
   public submitted: boolean = false;
 

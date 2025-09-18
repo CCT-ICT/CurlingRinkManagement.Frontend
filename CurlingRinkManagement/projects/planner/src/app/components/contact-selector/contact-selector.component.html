@@ -25,6 +25,22 @@
         <li>
             <hr class="dropdown-divider">
         </li>
-        <li><span class="dropdown-item">New contact</span></li>
+        <li><span class="dropdown-item" (click)="addNewContact()">New contact</span></li>
     </ul>
 </div>
+
+
+@if(showContactCreation){
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New contact</h5>
+            </div>
+            <div class="modal-body">
+                <app-contact-editor (successfulAction)="contactCreated($event)"></app-contact-editor>
+            </div>
+        </div>
+    </div>
+</div>
+}

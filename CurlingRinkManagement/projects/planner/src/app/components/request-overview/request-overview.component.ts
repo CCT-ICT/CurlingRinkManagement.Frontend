@@ -57,7 +57,10 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
 
   requestEdited(request: CustomerRequest) {
     this.showRequestModal = false
-    if(this.requestToEdit == null) return;
+    if(this.requestToEdit == null) {
+      this.requests.push(request);
+      return;
+    }
     var index = this.requests.indexOf(this.requestToEdit);
     this.requests[index] = request;
     this.requestToEdit = null;
