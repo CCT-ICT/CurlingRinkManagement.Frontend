@@ -6,7 +6,7 @@
 <form [formGroup]="requestForm">
     <div class="mb-3">
         <label for="title" class="form-label">Contact</label>
-        <app-contact-selector [(selectedContact)]="selectedContact" />
+        <app-contact-selector [(selectedContact)]="selectedContact" autocomplete="off" />
         @if(selectedContact == null && submitted){
         <div class="alert alert-danger">
             <div>
@@ -104,12 +104,12 @@
             </div>
         </div>
 
-        <!-- Cancelled State (separate from main flow) -->
+        <!-- Canceled State (separate from main flow) -->
         <div class="text-center mt-3">
-            <div class="state-button" [class.selected]="currentState == customerRequestState.Cancled"
-                (click)="currentState = customerRequestState.Cancled" data-state="Cancelled">
+            <div class="state-button" [class.selected]="currentState == customerRequestState.Canceled"
+                (click)="currentState = customerRequestState.Canceled" data-state="Canceled">
                 <i class="bi bi-x-circle state-icon"></i>
-                <div class="state-label">Cancelled</div>
+                <div class="state-label">Canceled</div>
             </div>
         </div>
 

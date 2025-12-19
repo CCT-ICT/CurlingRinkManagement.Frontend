@@ -18,9 +18,9 @@ export class ActivityService extends BaseApiService<ActivityModel> {
       .pipe(
         map(activities =>{
           activities.forEach(a =>{
-            a.plannedDates.forEach(p =>{
-              p.start = new Date(p.start);
-              p.end = new Date(p.end);
+            a.sheetActivities.forEach(p =>{
+              p.activityTime.start = new Date(p.activityTime.start);
+              p.activityTime.end = new Date(p.activityTime.end);
             })
           })
           return activities;

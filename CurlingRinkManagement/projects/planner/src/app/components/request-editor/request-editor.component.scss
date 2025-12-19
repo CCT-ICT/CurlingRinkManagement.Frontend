@@ -84,7 +84,8 @@
     color: #1b5e20;
 }
 
-.selected[data-state="Cancelled"] {
+.selected[data-state="Canceled"] {
+    background: linear-gradient(135deg, #f5e9e8, #c62828);
     color: #c62828;
 }
 
@@ -112,6 +113,6 @@
     border-color: #1b5e20;
 }
 
-[data-state="Cancelled"] {
+[data-state="Canceled"] {
     border-color: #c62828;
 }

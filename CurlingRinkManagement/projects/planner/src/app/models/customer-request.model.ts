@@ -19,5 +19,5 @@ export enum CustomerRequestState {
     InvoiceSent,
     PaymentReceived,
     Completed,
-    Cancled
+    Canceled
 }

@@ -8,6 +8,7 @@ import { DateTimeRange } from '../../models/date-time-range.model';
 import { MultiDateSelectComponent } from "../multi-date-select/multi-date-select.component";
 import { DateTimeInput, dateTimeInputToDates } from '../../models/date-time-input.model';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SheetActivity } from '../../models/sheet-activity.model';
 
 @Component({
     selector: 'app-sheet-overview',
@@ -76,12 +77,12 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     end.setHours(24);
     this.activityService.getInRange(this.sheet.id, start, end).subscribe(activities => {
       activities.forEach(activity => {
-        activity.plannedDates.forEach(p => {
+        activity.sheetActivities.forEach(p => {
           this.events.push({
-            timeStart: p.start,
-            timeEnd: p.end,
+            timeStart: p.activityTime.start,
+            timeEnd: p.activityTime.end,
             activity: activity,
-            originalStart: p.start
+            originalStart: p.activityTime.start
           });
         })
       })
@@ -158,7 +159,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     if (this.isCreating) return;
     this.currentEvent = event
     if (this.currentEvent.activity != null) {
-      this.plannedDates = this.currentEvent.activity.plannedDates.map((p) => new DateTimeInput(p.start, p.end))
+      this.plannedDates = this.currentEvent.activity.sheetActivities.map((p) => new DateTimeInput(p.activityTime.start, p.activityTime.end))
       this.activityForm.controls.activityTypeId.setValue(this.currentEvent.activity.activityTypeId);
       this.activityForm.controls.title.setValue(this.currentEvent.activity.title);
     }
@@ -180,18 +181,18 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     if (this.currentEvent == null || this.currentEvent.activity == null || this.activityForm.invalid) return;
     let form = this.activityForm.value;
     let activity = this.currentEvent.activity;
-    activity.plannedDates = [];
+    activity.sheetActivities = [];
     this.plannedDates.forEach(d => {
       let planned = new DateTimeRange();
       let range = dateTimeInputToDates(d);
       planned.start = range[0];
       planned.end = range[1];
-      activity.plannedDates.push(planned);
+      activity.sheetActivities.push({ sheetId: this.sheet.id, activityTime: planned, activityId: activity.id, id: crypto.randomUUID()} );
+
     })
     activity.activityTypeId = form.activityTypeId!;
     activity.title = form.title!;
-    activity.sheetIds = [this.sheet.id];
-    console.log(this.isCreating)
+    console.log(activity)
     if (this.isCreating) {
       this.activityService.create(activity).subscribe({
         next: a => {
