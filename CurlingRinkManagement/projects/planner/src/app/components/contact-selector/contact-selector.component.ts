@@ -27,13 +27,10 @@ export class ContactSelectorComponent implements OnInit {
   constructor(private contactService: ContactService) { }
 
   ngOnInit(): void {
-    // elem ref
-    const searchBox = document.getElementById('searchBox');
+    const searchBox = document.getElementById('contactSearchBox');
     if (searchBox === null) return;
-    // streams
     const keyup$ = fromEvent(searchBox, 'keyup')
 
-    // wait .5s between keyups to emit current value
     keyup$.pipe(
       map((i: any) => i.currentTarget.value),
       debounceTime(200)
@@ -67,12 +64,16 @@ export class ContactSelectorComponent implements OnInit {
     this.searchtext = "";
   }
 
-  public contactCreated(contactModel: ContactModel){
+  public contactCreated(contactModel: ContactModel) {
     this.selectedContact = contactModel;
     this.showContactCreation = false;
   }
 
-  public addNewContact(){
+  public addNewContact() {
     this.showContactCreation = true;
+  }
+
+  hideContactCreation() {
+    this.showContactCreation = false
   }
 }

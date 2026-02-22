@@ -10,17 +10,17 @@
     </div>
     }
     <!-- Regular search input -->
-    <input id="searchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+    <input id="contactSearchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" autocomplete="off"
         [(ngModel)]="searchtext" [style.display]="selectedContact? 'none':'block'" placeholder="Search contacts...">
 
 
-    <ul class="dropdown-menu" aria-labelledby="searchBox">
+    <ul class="dropdown-menu" >
         @if(contacts.length == 0){
         <li><span class="dropdown-text">No contacts found (Start typing to try get a new match)</span></li>
         }
         @for(contact of contacts; track contact.id){
         <li><span class="dropdown-item" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
-                {{contact.lastName}}</span></li>
+                {{contact.lastName}} ({{contact.email}})</span></li>
         }
         <li>
             <hr class="dropdown-divider">
@@ -38,7 +38,7 @@
                 <h5 class="modal-title">New contact</h5>
             </div>
             <div class="modal-body">
-                <app-contact-editor (successfulAction)="contactCreated($event)"></app-contact-editor>
+                <app-contact-editor (successfulAction)="contactCreated($event)" (exit)="hideContactCreation()"></app-contact-editor>
             </div>
         </div>
     </div>

@@ -9,13 +9,16 @@ import { MultiDateSelectComponent } from "../multi-date-select/multi-date-select
 import { DateTimeInput, dateTimeInputToDates } from '../../models/date-time-input.model';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SheetActivity } from '../../models/sheet-activity.model';
+import { RequestSelectorComponent } from "../request-selector/request-selector.component";
+import { CustomerRequest, CustomerRequestState } from '../../models/customer-request.model';
+import { CustomerRequestService } from '../../services/customer-request.service';
 
 @Component({
-    selector: 'app-sheet-overview',
-    standalone:true,
-    imports: [MultiDateSelectComponent, ReactiveFormsModule],
-    templateUrl: './sheet-overview.component.html',
-    styleUrl: './sheet-overview.component.scss'
+  selector: 'app-sheet-overview',
+  standalone: true,
+  imports: [MultiDateSelectComponent, ReactiveFormsModule, RequestSelectorComponent],
+  templateUrl: './sheet-overview.component.html',
+  styleUrl: './sheet-overview.component.scss'
 })
 export class SheetOverviewComponent implements OnInit, OnChanges {
   @Input()
@@ -43,8 +46,12 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     activityTypeId: new FormControl('', Validators.required)
   });
 
-  constructor(private activityService: ActivityService) { }
-  
+  public selectedRequest: CustomerRequest | null = null;
+
+  public requestsForActivities: Map<string, CustomerRequest> = new Map<string, CustomerRequest>();
+
+  constructor(private activityService: ActivityService, private requestService: CustomerRequestService) { }
+
   ngOnChanges(changes: SimpleChanges): void {
     this.times = [];
     this.events = [];
@@ -85,12 +92,17 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
             originalStart: p.activityTime.start
           });
         })
+        if (activity.customerRequestId) {
+          this.requestService.getById(activity.customerRequestId).subscribe(request => {
+            this.requestsForActivities.set(request.id, request);
+          });
+        }
       })
     });
   }
 
-  getColor(event : EventModel){
-    let activityType = this.activityTypes.find(a => a.id == event.activity?.activityTypeId) ;
+  getColor(event: EventModel) {
+    let activityType = this.activityTypes.find(a => a.id == event.activity?.activityTypeId);
     return activityType?.color ?? "aqua";
   }
 
@@ -162,6 +174,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
       this.plannedDates = this.currentEvent.activity.sheetActivities.map((p) => new DateTimeInput(p.activityTime.start, p.activityTime.end))
       this.activityForm.controls.activityTypeId.setValue(this.currentEvent.activity.activityTypeId);
       this.activityForm.controls.title.setValue(this.currentEvent.activity.title);
+      this.selectedRequest = this.requestsForActivities.get(this.currentEvent.activity.customerRequestId ?? "") ?? null;
     }
 
     console.log(event)
@@ -187,12 +200,17 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
       let range = dateTimeInputToDates(d);
       planned.start = range[0];
       planned.end = range[1];
-      activity.sheetActivities.push({ sheetId: this.sheet.id, activityTime: planned, activityId: activity.id, id: crypto.randomUUID()} );
+      activity.sheetActivities.push({ sheetId: this.sheet.id, activityTime: planned, activityId: activity.id, id: crypto.randomUUID() });
 
     })
     activity.activityTypeId = form.activityTypeId!;
     activity.title = form.title!;
-    console.log(activity)
+    activity.customerRequestId = this.selectedRequest?.id ?? null;
+    if (activity.customerRequestId && !this.requestsForActivities.has(activity.customerRequestId)) {
+      this.requestService.getById(activity.customerRequestId).subscribe(request => {
+        this.requestsForActivities.set(request.id, request);
+      });
+    }
     if (this.isCreating) {
       this.activityService.create(activity).subscribe({
         next: a => {
@@ -203,7 +221,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
           console.log(e);
         }
       });
-    } else{
+    } else {
       this.activityService.update(activity).subscribe({
         next: a => {
           this.currentEvent = null;
@@ -213,6 +231,10 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
         }
       });
     }
+  }
+
+  public getEnumString(request: CustomerRequest) {
+    return CustomerRequestState[request.customerRequestState]
   }
 
 }

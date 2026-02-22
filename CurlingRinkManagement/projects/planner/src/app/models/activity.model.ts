@@ -7,4 +7,5 @@ export class ActivityModel {
     public title: string = "";
     public sheetActivities: SheetActivity[] = [];
     public activityTypeId: string = "00000000-0000-0000-0000-000000000000";
+    public customerRequestId: string | null = null;
 }

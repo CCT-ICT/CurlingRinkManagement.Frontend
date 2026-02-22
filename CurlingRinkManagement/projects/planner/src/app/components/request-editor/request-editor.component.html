@@ -6,7 +6,7 @@
 <form [formGroup]="requestForm">
     <div class="mb-3">
         <label for="title" class="form-label">Contact</label>
-        <app-contact-selector [(selectedContact)]="selectedContact" autocomplete="off" />
+        <app-contact-selector [(selectedContact)]="selectedContact" />
         @if(selectedContact == null && submitted){
         <div class="alert alert-danger">
             <div>

@@ -48,7 +48,6 @@ export class RequestEditorComponent implements OnChanges {
 
   private populateForm(): void {
     if (this.selectedRequest) {
-      // Fill form with selected contact data
       this.requestForm.patchValue({
         title: this.selectedRequest.title,
         amountOfPeople: this.selectedRequest.amountOfPeople,
@@ -60,11 +59,9 @@ export class RequestEditorComponent implements OnChanges {
       this.showCustomPrice = this.selectedRequest.customPrice !== null && this.selectedRequest.customPrice > -1;
       this.contactService.getById(this.selectedRequest.contactId).subscribe((contact) => this.selectedContact = contact)
     } else {
-      // Reset form when no request is selected
       this.requestForm.reset();
     }
 
-    // Reset form state
     this.submitted = false;
     this.error = null;
   }
