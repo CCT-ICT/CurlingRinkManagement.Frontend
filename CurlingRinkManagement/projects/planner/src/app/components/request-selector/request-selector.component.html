@@ -1,0 +1,50 @@
+<div class="dropdown">
+    @if(selectedRequest && selectedRequestContact) {
+    <!-- Selected contact display -->
+    <div class="form-control d-flex align-items-center justify-content-between">
+        <span class="badge bg-primary d-flex align-items-center">
+            {{selectedRequest.title}} ({{selectedRequestContact.firstName}} {{selectedRequestContact.prefix}}
+            {{selectedRequestContact.lastName}})
+            <button type="button" class="btn-close btn-close-white ms-2" (click)="clearSelection()"
+                aria-label="Remove contact"></button>
+        </span>
+    </div>
+    }
+    <!-- Regular search input -->
+    <input id="requestSearchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"  autocomplete="off"
+        [(ngModel)]="searchtext" [style.display]="selectedRequest? 'none':'block'" placeholder="Search requests...">
+
+
+    <ul class="dropdown-menu" >
+        @if(selectedRequests.length == 0){
+        <li><span class="dropdown-text">No requests found (Start typing to try get a new match)</span></li>
+        }
+        @for(request of selectedRequests; track request.id){
+        <li><span class="dropdown-item" (click)="selectRequest(request)">
+                {{request.title}}
+                ({{requestContacts.get(request.id)?.firstName}} {{requestContacts.get(request.id)?.prefix}}
+                {{requestContacts.get(request.id)?.lastName}})</span></li>
+        }
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        <li><span class="dropdown-item" (click)="addNewRequest()">New request</span></li>
+    </ul>
+</div>
+
+
+@if(showRequestCreation){
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New request</h5>
+            </div>
+            <div class="modal-body">
+                <app-request-editor (successfulAction)="requestCreated($event)"
+                    (exit)="hideRequestCreation()"></app-request-editor>
+            </div>
+        </div>
+    </div>
+</div>
+}

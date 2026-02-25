@@ -9,10 +9,21 @@
       [style.background-color]="getColor(event)" [style.height]="getLength(event)/60*heightInPixels + 'px'"
       [attr.start]="event.timeStart" [attr.end]="event.timeEnd"
       (mousedown)="selectEvent(event); $event.stopPropagation()">
-      <small class="no-highlight" style="position: relative;">{{event.timeStart.toLocaleString("nl-NL",
-        {hour:"2-digit", minute:"2-digit"})}} - {{event.timeEnd.toLocaleString("nl-NL", {hour:"2-digit",
-        minute:"2-digit"})}}</small>
-      <br><small class="no-highlight" style="position: relative;">{{event.activity?.title}}</small>
+      <div class="innerevent">
+
+        <small class="no-highlight" style="position: relative;">{{event.activity?.title}}</small>
+        @let request = event.activity?.customerRequestId ? requestsForActivities.get(event.activity!.customerRequestId!)
+        : undefined;
+        @if(request){
+        <br><small class="no-highlight" style="position: relative;">{{request.title}}</small>
+        <br><small class="no-highlight" style="position: relative;">Amount of people: {{request.amountOfPeople}}</small>
+        <br><small class="no-highlight" style="position: relative;">State: {{getEnumString(request)}}</small>
+        <br>
+        <small class="no-highlight" style="position: relative;">{{event.timeStart.toLocaleString("nl-NL",
+          {hour:"2-digit", minute:"2-digit"})}} - {{event.timeEnd.toLocaleString("nl-NL", {hour:"2-digit",
+          minute:"2-digit"})}}</small>
+        }
+      </div>
     </div>
     }
   </div>
@@ -29,6 +40,7 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="activityForm">
+          <app-request-selector [(selectedRequest)]="selectedRequest"></app-request-selector>
           <div class="mb-3">
             <label for="activityType" class="form-label">Activity Type</label>
             <select class="form-select" id="activityType" formControlName="activityTypeId">

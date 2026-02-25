@@ -14,13 +14,13 @@ export class ActivityService extends BaseApiService<ActivityModel> {
   constructor(httpClient:HttpClient, oauthService: OAuthService, clubService:ClubService) { super(httpClient, oauthService, "Activity", environment.plannerApiUrl, clubService)}
 
   public getInRange(sheetId:string, start:Date, end:Date) : Observable<ActivityModel[]>{
-    return this.httpClient.get<ActivityModel[]>(`${environment.baseApiUrl}/Api/${this.endpoint}/${sheetId}?start=${start.toJSON()}&end=${end.toJSON()}`, { headers: this.getHeaders() })
+    return this.httpClient.get<ActivityModel[]>(`${environment.plannerApiUrl}/Api/${this.endpoint}/${sheetId}?start=${start.toJSON()}&end=${end.toJSON()}`, { headers: this.getHeaders() })
       .pipe(
         map(activities =>{
           activities.forEach(a =>{
-            a.plannedDates.forEach(p =>{
-              p.start = new Date(p.start);
-              p.end = new Date(p.end);
+            a.sheetActivities.forEach(p =>{
+              p.activityTime.start = new Date(p.activityTime.start);
+              p.activityTime.end = new Date(p.activityTime.end);
             })
           })
           return activities;

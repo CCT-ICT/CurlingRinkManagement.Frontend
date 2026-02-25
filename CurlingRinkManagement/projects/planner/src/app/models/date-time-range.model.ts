@@ -4,5 +4,5 @@ export class DateTimeRange {
     public end : Date = new Date();
     public minutesBlockedBefore : number = 0;
     public minutesBlockedAfter : number = 0;
-    public activityId : string = "00000000-0000-0000-0000-000000000000";
+    public sheetActivityId : string = "00000000-0000-0000-0000-000000000000";
 }

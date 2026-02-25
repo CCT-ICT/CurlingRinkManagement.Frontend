@@ -4,7 +4,9 @@ import { OAuthService } from "angular-oauth2-oidc";
 import { ClubService } from "./club.service";
 
 export class BaseApiService<T> {
+    
     constructor(protected httpClient: HttpClient, private oauthService: OAuthService, protected endpoint: string, private apiBase: string, private clubService: ClubService) { }
+    
     public getAll(page: number | null = null, amount: number | null = null, filters: string[] | null = null, filterValues: string[] | null = null): Observable<T[]> {
         let params = new HttpParams();
         if (page) {
@@ -18,10 +20,15 @@ export class BaseApiService<T> {
         return this.httpClient.get<T[]>(`${this.apiBase}/Api/${this.endpoint}`, { headers: this.getHeaders(), params: params });
     }
 
+    public getById(id:string): Observable<T> {
+
+        return this.httpClient.get<T>(`${this.apiBase}/Api/${this.endpoint}/${id}`, { headers: this.getHeaders()});
+    }
+
     public getAmount(filters: string[] | null = null, filterValues: string[] | null = null): Observable<number> {
         let params = new HttpParams();
         params = this.addFiltersToParams(params, filters, filterValues);
-        return this.httpClient.get<number>(`${this.apiBase}/Api/${this.endpoint}/Amount`, { headers: this.getHeaders(), params:params });
+        return this.httpClient.get<number>(`${this.apiBase}/Api/${this.endpoint}/Amount`, { headers: this.getHeaders(), params: params });
     }
 
 

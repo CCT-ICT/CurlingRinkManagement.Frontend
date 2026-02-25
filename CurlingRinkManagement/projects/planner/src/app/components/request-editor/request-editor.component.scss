@@ -1,0 +1,118 @@
+
+.state-flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.state-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 120px;
+    position: relative;
+}
+
+.state-button:hover {
+    border-color: #0d6efd;
+    background-color: #f8f9ff;
+}
+.state-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.state-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.flow-arrow {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin: 0 5px;
+}
+
+@media (max-width: 768px) {
+    .state-flow {
+        flex-direction: column;
+    }
+
+    .flow-arrow {
+        transform: rotate(90deg);
+    }
+}
+
+.selected[data-state="ConversationStarted"] {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #1565c0;
+}
+
+.selected[data-state="DateInOption"] {
+    background: linear-gradient(135deg, #fff3e0, #ffcc02);
+    color: #e65100;
+}
+
+.selected[data-state="DateConfirmed"] {
+    background: linear-gradient(135deg, #e8f5e8, #a5d6a7);
+    color: #2e7d32;
+}
+
+.selected[data-state="InvoiceSent"] {
+    background: linear-gradient(135deg, #f3e5f5, #ce93d8);
+    color: #6a1b9a;
+}
+
+.selected[data-state="PaymentReceived"] {
+    background: linear-gradient(135deg, #e0f2f1, #80cbc4);
+    color: #00695c;
+}
+
+.selected[data-state="Completed"] {
+    background: linear-gradient(135deg, #e8f5e8, #81c784);
+    color: #1b5e20;
+}
+
+.selected[data-state="Canceled"] {
+    background: linear-gradient(135deg, #f5e9e8, #c62828);
+    color: #c62828;
+}
+
+[data-state="ConversationStarted"] {
+    border-color: #1565c0;
+}
+
+[data-state="DateInOption"] {
+    border-color: #e65100;
+}
+
+[data-state="DateConfirmed"] {
+    border-color: #2e7d32;
+}
+
+[data-state="InvoiceSent"] {
+    border-color: #6a1b9a;
+}
+
+[data-state="PaymentReceived"] {
+    border-color: #00695c;
+}
+
+[data-state="Completed"] {
+    border-color: #1b5e20;
+}
+
+[data-state="Canceled"] {
+    border-color: #c62828;
+}

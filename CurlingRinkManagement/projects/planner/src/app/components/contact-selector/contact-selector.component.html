@@ -1,0 +1,46 @@
+<div class="dropdown">
+    @if(selectedContact) {
+    <!-- Selected contact display -->
+    <div class="form-control d-flex align-items-center justify-content-between">
+        <span class="badge bg-primary d-flex align-items-center">
+            {{selectedContact.firstName}} {{selectedContact.prefix}} {{selectedContact.lastName}}
+            <button type="button" class="btn-close btn-close-white ms-2" (click)="clearSelection()"
+                aria-label="Remove contact"></button>
+        </span>
+    </div>
+    }
+    <!-- Regular search input -->
+    <input id="contactSearchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" autocomplete="off"
+        [(ngModel)]="searchtext" [style.display]="selectedContact? 'none':'block'" placeholder="Search contacts...">
+
+
+    <ul class="dropdown-menu" >
+        @if(contacts.length == 0){
+        <li><span class="dropdown-text">No contacts found (Start typing to try get a new match)</span></li>
+        }
+        @for(contact of contacts; track contact.id){
+        <li><span class="dropdown-item" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
+                {{contact.lastName}} ({{contact.email}})</span></li>
+        }
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        <li><span class="dropdown-item" (click)="addNewContact()">New contact</span></li>
+    </ul>
+</div>
+
+
+@if(showContactCreation){
+<div class="modal" tabindex="-1" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New contact</h5>
+            </div>
+            <div class="modal-body">
+                <app-contact-editor (successfulAction)="contactCreated($event)" (exit)="hideContactCreation()"></app-contact-editor>
+            </div>
+        </div>
+    </div>
+</div>
+}
