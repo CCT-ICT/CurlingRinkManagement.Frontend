@@ -14,9 +14,9 @@ export class UserService {
     this.apiBase = environment.baseApiUrl;
   }
 
-  public getAll(club: string): Observable<UserData> {
+  public getAll(club: string, search: string): Observable<UserData> {
 
-    return this.httpClient.get<UserData>(`${this.apiBase}/Api/${this.endpoint}/${club}`, { headers: this.getHeaders() });
+    return this.httpClient.get<UserData>(`${this.apiBase}/Api/${this.endpoint}/${club}?search=${search}`, { headers: this.getHeaders() });
   }
 
 

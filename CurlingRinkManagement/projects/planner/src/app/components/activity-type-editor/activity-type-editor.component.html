@@ -36,6 +36,32 @@
                         <input class="form-control" required type="number" name="minutesAfter"
                             [(ngModel)]="activityType.recommendedMinutesBlockedAfter">
                     </div>
+
+                    <label class="form-label">Instructors for activity (per timeblok)</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+
+                            <!-- Amount -->
+                            <input type="number" class="form-control" [(ngModel)]="activityType.amountOfInstructors"
+                                min="0" placeholder="Amount">
+
+                            <!-- Static text "per" -->
+                            <span class="input-group-text">instructors per</span>
+
+                            <!-- Per Selected Value -->
+                            <input type="number" class="form-control" [(ngModel)]="activityType.perSelectedValue"
+                                min="0" placeholder="Value">
+
+                            <!-- Calculation Type -->
+                            <select class="form-select" [(ngModel)]="activityType.instructorCalculationType">
+                                <option [ngValue]="CalculationType.People">People</option>
+                                <option [ngValue]="CalculationType.Sheet">Sheet</option>
+                                <option [ngValue]="CalculationType.Activity">Activity</option>
+                            </select>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

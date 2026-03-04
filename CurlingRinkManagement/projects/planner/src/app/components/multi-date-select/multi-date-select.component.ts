@@ -4,31 +4,33 @@ import { SheetTimeInput as SheetTimeInput } from '../../models/date-time-input.m
 import moment from 'moment';
 import { SheetService } from '../../services/sheet.service';
 import { SheetModel } from '../../models/sheet.model';
+import { ActivityTypeModel } from '../../models/activity-type.model';
+import { UserService } from '../../../../../common-api/src/public-api';
+import { User } from '../../../../../common-api/src/lib/models/user.model';
+import { SheetSelectorComponent } from "../sheet-selector/sheet-selector.component";
+import { UserSelectorComponent } from "../user-selector/user-selector.component";
 
 @Component({
   selector: 'app-multi-date-select',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, SheetSelectorComponent, UserSelectorComponent],
   templateUrl: './multi-date-select.component.html',
   styleUrl: './multi-date-select.component.scss'
 })
-export class MulyiSheetActivitySelectComponent implements OnInit {
+export class MultiSheetActivitySelectComponent  {
 
   @Input()
   public sheetTimeInput: SheetTimeInput[] = []
+  @Input()
+  public currentActivityType: ActivityTypeModel = new ActivityTypeModel();
 
   @Output()
   public sheetTimeInputChange: EventEmitter<SheetTimeInput[]> = new EventEmitter();
 
-  public sheets: SheetModel[] = [];
 
-  constructor(private sheetService: SheetService) { }
 
-  ngOnInit(): void {
-    this.sheetService.getAll().subscribe(sheets => {
-      this.sheets = sheets.sort((a, b) => a.order - b.order);
-    });
-  }
+  constructor() { }
+
 
 
   public removeDate(index: number) {
@@ -39,7 +41,7 @@ export class MulyiSheetActivitySelectComponent implements OnInit {
 
   public addDate() {
     if (this.sheetTimeInput.length == 0) {
-      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), this.sheets[0].id));
+      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), null));
     }
 
     if (this.sheetTimeInput.length < 2 || this.sheetTimeInput[this.sheetTimeInput.length - 1].date === "" || this.sheetTimeInput[this.sheetTimeInput.length - 2].date === "") {
@@ -47,7 +49,8 @@ export class MulyiSheetActivitySelectComponent implements OnInit {
         date: this.sheetTimeInput[this.sheetTimeInput.length - 1].date,
         startTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].startTime,
         endTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].endTime,
-        sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId
+        sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId,
+        instructorIds: []
       });
       return;
     }
@@ -62,7 +65,15 @@ export class MulyiSheetActivitySelectComponent implements OnInit {
       date: moment(d2).format('yyyy-MM-DD'),
       startTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].startTime,
       endTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].endTime,
-      sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId
+      sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId,
+      instructorIds: []
     })
+  }
+
+  public addInstructor(sheetTimeInput: SheetTimeInput) {
+      sheetTimeInput.instructorIds.push('');
+  }
+  public onSheetChange(sheet:SheetModel | null, index: number) {
+    this.sheetTimeInput[index].sheetId = sheet?.id || null;
   }
 }

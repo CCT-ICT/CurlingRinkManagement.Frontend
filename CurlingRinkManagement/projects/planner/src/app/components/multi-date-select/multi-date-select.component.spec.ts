@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MulyiSheetActivitySelectComponent } from './multi-date-select.component';
+import { MultiSheetActivitySelectComponent } from './multi-date-select.component';
 
 describe('MultiDateSelectComponent', () => {
-  let component: MulyiSheetActivitySelectComponent;
-  let fixture: ComponentFixture<MulyiSheetActivitySelectComponent>;
+  let component: MultiSheetActivitySelectComponent;
+  let fixture: ComponentFixture<MultiSheetActivitySelectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MulyiSheetActivitySelectComponent]
+      imports: [MultiSheetActivitySelectComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MulyiSheetActivitySelectComponent);
+    fixture = TestBed.createComponent(MultiSheetActivitySelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

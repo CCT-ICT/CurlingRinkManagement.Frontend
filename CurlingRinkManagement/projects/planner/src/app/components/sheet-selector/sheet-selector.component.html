@@ -1,5 +1,5 @@
-<select class="sheet-select" aria-label="Sheet selector" #mySelect (change)="onSheetChange(mySelect.value)">
+<select class="form-select" aria-label="Sheet selector" #mySelect (change)="onSheetChange(mySelect.value)">
     @for (sheet of sheets; track $index) {
-    <option [selected]="sheet.id === selectedSheet?.id" [value]="sheet.id">{{sheet.id}}</option>
+    <option [selected]="sheet.id === selectedSheet?.id" [value]="sheet.id">{{sheet.name}}</option>
     }
 </select>

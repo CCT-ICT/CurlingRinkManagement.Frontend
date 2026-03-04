@@ -1,5 +1,5 @@
 import { Component, EventEmitter, input, Input, OnChanges, Output, output, SimpleChanges } from '@angular/core';
-import { MulyiSheetActivitySelectComponent } from "../multi-date-select/multi-date-select.component";
+import { MultiSheetActivitySelectComponent } from "../multi-date-select/multi-date-select.component";
 import { RequestSelectorComponent } from "../request-selector/request-selector.component";
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomerRequest } from '../../models/customer-request.model';
@@ -12,7 +12,7 @@ import { SheetTimeInput, dateTimeInputToDates } from '../../models/date-time-inp
 
 @Component({
   selector: 'app-activity-editor',
-  imports: [MulyiSheetActivitySelectComponent, RequestSelectorComponent, ReactiveFormsModule],
+  imports: [MultiSheetActivitySelectComponent, RequestSelectorComponent, ReactiveFormsModule],
   templateUrl: './activity-editor.component.html',
   styleUrl: './activity-editor.component.scss'
 })
@@ -67,7 +67,7 @@ export class ActivityEditorComponent implements OnChanges {
       let range = dateTimeInputToDates(d);
       planned.start = range[0];
       planned.end = range[1];
-      activity.sheetActivities.push({ sheetId: d.sheetId, activityTime: planned, activityId: activity.id, id: crypto.randomUUID() });
+      activity.sheetActivities.push({ sheetId: d.sheetId!, activityTime: planned, activityId: activity.id, id: crypto.randomUUID() });
 
     });
 

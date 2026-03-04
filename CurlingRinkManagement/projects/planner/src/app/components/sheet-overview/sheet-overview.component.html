@@ -14,15 +14,15 @@
         <small class="no-highlight" style="position: relative;">{{event.activity?.title}}</small>
         @let request = event.activity?.customerRequestId ? requestsForActivities.get(event.activity!.customerRequestId!)
         : undefined;
-        @if(request){
+        @if(request && getLength(event) >= 120){
         <br><small class="no-highlight" style="position: relative;">{{request.title}}</small>
         <br><small class="no-highlight" style="position: relative;">Amount of people: {{request.amountOfPeople}}</small>
         <br><small class="no-highlight" style="position: relative;">State: {{getEnumString(request)}}</small>
+        }
         <br>
         <small class="no-highlight" style="position: relative;">{{event.timeStart.toLocaleString("nl-NL",
           {hour:"2-digit", minute:"2-digit"})}} - {{event.timeEnd.toLocaleString("nl-NL", {hour:"2-digit",
           minute:"2-digit"})}}</small>
-        }
       </div>
     </div>
     }
@@ -31,6 +31,7 @@
 </div>
 
 @if(currentEvent !== null && currentEvent.activity !== null){
-<app-activity-editor [activity]="currentEvent.activity" [selectedTimeRange]="selectedTimeRange" [activityTypes]="activityTypes" [isCreating]="isCreating" (activityChanged)="onActivityUpdated($event)"
+<app-activity-editor [activity]="currentEvent.activity" [selectedTimeRange]="selectedTimeRange"
+  [activityTypes]="activityTypes" [isCreating]="isCreating" (activityChanged)="onActivityUpdated($event)"
   (onClose)="onClose()"></app-activity-editor>
 }

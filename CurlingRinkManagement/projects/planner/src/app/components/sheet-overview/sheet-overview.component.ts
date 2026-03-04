@@ -165,18 +165,27 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   }
 
   public onActivityUpdated(activity: ActivityModel) {
-
     if (activity.customerRequestId && !this.requestsForActivities.has(activity.customerRequestId)) {
       this.requestService.getById(activity.customerRequestId).subscribe(request => {
         this.requestsForActivities.set(request.id, request);
       });
     }
+    var foundTime = false;
+    activity.sheetActivities.forEach(p => {
+      if (this.currentEvent && p.sheetId == this.sheet.id&& this.currentEvent.timeStart == p.activityTime.start && this.currentEvent.timeEnd == p.activityTime.end) {
+        foundTime = true;
+      }
+    });
+    if (!foundTime) {
+      location.reload();
+    }
+
     this.currentEvent = null;
     this.isCreating = false;
 
   }
 
-  public onClose (){
+  public onClose() {
     if (this.currentEvent == null) return;
     if (this.isCreating) {
       this.events.splice(this.events.indexOf(this.currentEvent), 1);

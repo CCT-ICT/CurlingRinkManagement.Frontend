@@ -22,7 +22,7 @@ export class UserOverviewComponent extends BasePaginationPageComponent implement
   override loadEntities(): void {
     var club = this.clubService.getCurrentClub()?.clubAbbriviation;
     if (!club) return;
-    this.userService.getAll(club).subscribe({
+    this.userService.getAll(club, '').subscribe({
       next: (data) => {
         this.userData = data;
         this.totalAmount = data.count;

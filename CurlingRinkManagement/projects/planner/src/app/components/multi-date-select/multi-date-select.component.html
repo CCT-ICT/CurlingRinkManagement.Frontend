@@ -5,12 +5,12 @@
         <input class="form-control" required [(ngModel)]="sheetInput.date" type="date" name="date" >
         <input class="form-control" required [(ngModel)]="sheetInput.startTime" type="time" name="startTime">
         <input class="form-control" required [(ngModel)]="sheetInput.endTime" type="time" name="endTime">
-        <select class="form-select" required [(ngModel)]="sheetInput.sheetId" name="sheetId">
-          <option selected disabled value="">Select sheet</option>
-          @for (sheet of sheets; track sheet) {
-            <option [value]="sheet.id" [selected]="sheet.id == sheetInput.sheetId">{{sheet.name}}</option>
-          }
-        </select>
+        <app-sheet-selector [preSelectedSheetId]="sheetInput.sheetId" (selectedSheetChange)="onSheetChange($event, i)"></app-sheet-selector>
+        <p>Instructors </p>
+        @for (instructorId of sheetInput.instructorIds; track instructorId) {
+          <app-user-selector [(selectedUserId)]="sheetInput.instructorIds[$index]"></app-user-selector>
+        }
+        <button type="button" class="btn btn-sm btn-outline-primary" (click)="addInstructor(sheetInput)"><i class="fa-solid fa-plus"></i></button>
     </div>
 </div>
 }

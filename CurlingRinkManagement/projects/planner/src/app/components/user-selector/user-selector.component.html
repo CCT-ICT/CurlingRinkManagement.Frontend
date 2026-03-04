@@ -1,0 +1,26 @@
+<div class="dropdown">
+    @if(selectedUser) {
+    <!-- Selected user display -->
+    <div class="form-control d-flex align-items-center justify-content-between">
+        <span class="badge bg-primary d-flex align-items-center">
+            {{selectedUser.name}}
+            <button type="button" class="btn-close btn-close-white ms-2" (click)="clearSelection()"
+                aria-label="Remove contact"></button>
+        </span>
+    </div>
+    }
+    <!-- Regular search input -->
+    <input #userSearchBox class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" autocomplete="off"
+        [(ngModel)]="searchtext" [style.display]="selectedUser? 'none':'block'" placeholder="Search users...">
+
+
+    <ul class="dropdown-menu" >
+        @if(users.length == 0){
+        <li><span class="dropdown-text">No users found (Start typing to try get a new match)</span></li>
+        }
+        @for(user of users; track user.identity){
+        <li><span class="dropdown-item" (click)="selectUser(user)">{{user.name}} </span></li>
+        }
+    </ul>
+</div>
+

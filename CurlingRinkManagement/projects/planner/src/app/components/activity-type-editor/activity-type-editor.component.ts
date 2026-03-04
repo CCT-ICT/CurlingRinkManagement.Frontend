@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivityTypeService } from '../../services/activity-type.service';
-import { ActivityTypeModel } from '../../models/activity-type.model';
+import { ActivityTypeModel, CalculationType } from '../../models/activity-type.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './activity-type-editor.component.scss'
 })
 export class ActivityTypeEditorComponent implements OnInit {
+  public CalculationType = CalculationType;
 
   public activityTypes: ActivityTypeModel[] = [];
 
