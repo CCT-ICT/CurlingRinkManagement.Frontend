@@ -1,54 +1,68 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DateTimeInput } from '../../models/date-time-input.model';
+import { SheetTimeInput as SheetTimeInput } from '../../models/date-time-input.model';
 import moment from 'moment';
+import { SheetService } from '../../services/sheet.service';
+import { SheetModel } from '../../models/sheet.model';
 
 @Component({
-    selector: 'app-multi-date-select',
-    standalone:true,
-    imports: [FormsModule],
-    templateUrl: './multi-date-select.component.html',
-    styleUrl: './multi-date-select.component.scss'
+  selector: 'app-multi-date-select',
+  standalone: true,
+  imports: [FormsModule],
+  templateUrl: './multi-date-select.component.html',
+  styleUrl: './multi-date-select.component.scss'
 })
-export class MultiDateSelectComponent {
+export class MulyiSheetActivitySelectComponent implements OnInit {
 
   @Input()
-  public dates: DateTimeInput[] = []
+  public sheetTimeInput: SheetTimeInput[] = []
 
   @Output()
-  public datesChange: EventEmitter<DateTimeInput[]> = new EventEmitter();
+  public sheetTimeInputChange: EventEmitter<SheetTimeInput[]> = new EventEmitter();
+
+  public sheets: SheetModel[] = [];
+
+  constructor(private sheetService: SheetService) { }
+
+  ngOnInit(): void {
+    this.sheetService.getAll().subscribe(sheets => {
+      this.sheets = sheets.sort((a, b) => a.order - b.order);
+    });
+  }
 
 
   public removeDate(index: number) {
-    if (this.dates.length === 1) return;
+    if (this.sheetTimeInput.length === 1) return;
 
-    this.dates.splice(index, 1);
+    this.sheetTimeInput.splice(index, 1);
   }
 
   public addDate() {
-    if (this.dates.length == 0) {
-      this.dates.push(new DateTimeInput(new Date(), new Date()));
+    if (this.sheetTimeInput.length == 0) {
+      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), this.sheets[0].id));
     }
 
-    if (this.dates.length < 2 || this.dates[this.dates.length - 1].date === "" || this.dates[this.dates.length - 2].date === "") {
-      this.dates.push({
-        date: this.dates[this.dates.length - 1].date,
-        startTime: this.dates[this.dates.length - 1].startTime,
-        endTime: this.dates[this.dates.length - 1].endTime
+    if (this.sheetTimeInput.length < 2 || this.sheetTimeInput[this.sheetTimeInput.length - 1].date === "" || this.sheetTimeInput[this.sheetTimeInput.length - 2].date === "") {
+      this.sheetTimeInput.push({
+        date: this.sheetTimeInput[this.sheetTimeInput.length - 1].date,
+        startTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].startTime,
+        endTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].endTime,
+        sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId
       });
       return;
     }
 
-    let d1 = new Date(this.dates[this.dates.length - 2].date)
-    let d2 = new Date(this.dates[this.dates.length - 1].date)
+    let d1 = new Date(this.sheetTimeInput[this.sheetTimeInput.length - 2].date)
+    let d2 = new Date(this.sheetTimeInput[this.sheetTimeInput.length - 1].date)
     let interval = d2.getTime() - d1.getTime();
     let intervalInDays = Math.round(interval / (1000 * 3600 * 24));
     d2.setDate(d2.getDate() + intervalInDays);
 
-    this.dates.push({
+    this.sheetTimeInput.push({
       date: moment(d2).format('yyyy-MM-DD'),
-      startTime: this.dates[this.dates.length - 1].startTime,
-      endTime: this.dates[this.dates.length - 1].endTime
+      startTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].startTime,
+      endTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].endTime,
+      sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId
     })
   }
 }

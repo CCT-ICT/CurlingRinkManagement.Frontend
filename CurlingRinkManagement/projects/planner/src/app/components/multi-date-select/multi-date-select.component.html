@@ -1,10 +1,16 @@
-@for(date of dates; track date; let i = $index){
+@for(sheetInput of sheetTimeInput; track sheetInput; let i = $index){
 <div class="card">
     <div class="dateRangeSelection card-body">
         <i class="fa-solid fa-trash" (click)="removeDate(i)"></i>
-        <input class="form-control" required [(ngModel)]="date.date" type="date" name="date" >
-        <input class="form-control" required [(ngModel)]="date.startTime" type="time" name="startTime">
-        <input class="form-control" required [(ngModel)]="date.endTime" type="time" name="endTime">
+        <input class="form-control" required [(ngModel)]="sheetInput.date" type="date" name="date" >
+        <input class="form-control" required [(ngModel)]="sheetInput.startTime" type="time" name="startTime">
+        <input class="form-control" required [(ngModel)]="sheetInput.endTime" type="time" name="endTime">
+        <select class="form-select" required [(ngModel)]="sheetInput.sheetId" name="sheetId">
+          <option selected disabled value="">Select sheet</option>
+          @for (sheet of sheets; track sheet) {
+            <option [value]="sheet.id" [selected]="sheet.id == sheetInput.sheetId">{{sheet.name}}</option>
+          }
+        </select>
     </div>
 </div>
 }

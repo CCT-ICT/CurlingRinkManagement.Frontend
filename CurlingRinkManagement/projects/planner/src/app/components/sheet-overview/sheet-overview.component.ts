@@ -1,22 +1,20 @@
-import { Component, Input, input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { EventModel } from '../../models/event.model';
 import { ActivityTypeModel } from '../../models/activity-type.model';
 import { SheetModel } from '../../models/sheet.model';
 import { ActivityService } from '../../services/activity.service';
 import { ActivityModel } from '../../models/activity.model';
 import { DateTimeRange } from '../../models/date-time-range.model';
-import { MultiDateSelectComponent } from "../multi-date-select/multi-date-select.component";
-import { DateTimeInput, dateTimeInputToDates } from '../../models/date-time-input.model';
-import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SheetActivity } from '../../models/sheet-activity.model';
-import { RequestSelectorComponent } from "../request-selector/request-selector.component";
+import { SheetTimeInput } from '../../models/date-time-input.model';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CustomerRequest, CustomerRequestState } from '../../models/customer-request.model';
 import { CustomerRequestService } from '../../services/customer-request.service';
+import { ActivityEditorComponent } from "../activity-editor/activity-editor.component";
 
 @Component({
   selector: 'app-sheet-overview',
   standalone: true,
-  imports: [MultiDateSelectComponent, ReactiveFormsModule, RequestSelectorComponent],
+  imports: [ReactiveFormsModule, ActivityEditorComponent],
   templateUrl: './sheet-overview.component.html',
   styleUrl: './sheet-overview.component.scss'
 })
@@ -36,17 +34,9 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   public times: Date[] = [];
   public currentEvent: EventModel | null = null;
   public events: EventModel[] = []
-  public plannedDates: DateTimeInput[] = [];
 
   public isCreating: boolean = false;
-
-  private formBuilder = new FormBuilder();
-  public activityForm = this.formBuilder.nonNullable.group({
-    title: new FormControl(''),
-    activityTypeId: new FormControl('', Validators.required)
-  });
-
-  public selectedRequest: CustomerRequest | null = null;
+  public selectedTimeRange: SheetTimeInput | null = null;
 
   public requestsForActivities: Map<string, CustomerRequest> = new Map<string, CustomerRequest>();
 
@@ -139,7 +129,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     let planned = new DateTimeRange();
     planned.start = this.currentEvent.timeStart;
     planned.end = this.currentEvent.timeEnd;
-    this.plannedDates = [new DateTimeInput(planned.start, planned.end)]
+    this.selectedTimeRange = new SheetTimeInput(planned.start, planned.end, this.sheet.id);
 
     document.getElementById(this.sheet.name);
   }
@@ -170,67 +160,29 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   selectEvent(event: EventModel) {
     if (this.isCreating) return;
     this.currentEvent = event
-    if (this.currentEvent.activity != null) {
-      this.plannedDates = this.currentEvent.activity.sheetActivities.map((p) => new DateTimeInput(p.activityTime.start, p.activityTime.end))
-      this.activityForm.controls.activityTypeId.setValue(this.currentEvent.activity.activityTypeId);
-      this.activityForm.controls.title.setValue(this.currentEvent.activity.title);
-      this.selectedRequest = this.requestsForActivities.get(this.currentEvent.activity.customerRequestId ?? "") ?? null;
-    }
 
     console.log(event)
   }
 
+  public onActivityUpdated(activity: ActivityModel) {
 
-  cancel() {
+    if (activity.customerRequestId && !this.requestsForActivities.has(activity.customerRequestId)) {
+      this.requestService.getById(activity.customerRequestId).subscribe(request => {
+        this.requestsForActivities.set(request.id, request);
+      });
+    }
+    this.currentEvent = null;
+    this.isCreating = false;
+
+  }
+
+  public onClose (){
     if (this.currentEvent == null) return;
     if (this.isCreating) {
       this.events.splice(this.events.indexOf(this.currentEvent), 1);
       this.isCreating = false;
     }
     this.currentEvent = null;
-  }
-
-  save() {
-    if (this.currentEvent == null || this.currentEvent.activity == null || this.activityForm.invalid) return;
-    let form = this.activityForm.value;
-    let activity = this.currentEvent.activity;
-    activity.sheetActivities = [];
-    this.plannedDates.forEach(d => {
-      let planned = new DateTimeRange();
-      let range = dateTimeInputToDates(d);
-      planned.start = range[0];
-      planned.end = range[1];
-      activity.sheetActivities.push({ sheetId: this.sheet.id, activityTime: planned, activityId: activity.id, id: crypto.randomUUID() });
-
-    })
-    activity.activityTypeId = form.activityTypeId!;
-    activity.title = form.title!;
-    activity.customerRequestId = this.selectedRequest?.id ?? null;
-    if (activity.customerRequestId && !this.requestsForActivities.has(activity.customerRequestId)) {
-      this.requestService.getById(activity.customerRequestId).subscribe(request => {
-        this.requestsForActivities.set(request.id, request);
-      });
-    }
-    if (this.isCreating) {
-      this.activityService.create(activity).subscribe({
-        next: a => {
-          this.currentEvent = null;
-          this.isCreating = false;
-        },
-        error: e => {
-          console.log(e);
-        }
-      });
-    } else {
-      this.activityService.update(activity).subscribe({
-        next: a => {
-          this.currentEvent = null;
-        },
-        error: e => {
-          console.log(e);
-        }
-      });
-    }
   }
 
   public getEnumString(request: CustomerRequest) {

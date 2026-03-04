@@ -1,0 +1,27 @@
+<div class="container py-5">
+    <h2>User Overview</h2>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="text-muted">
+            Showing {{ getStartIndex() + 1 }} - {{ getEndIndex() }} of {{ totalAmount }} contacts
+        </div>
+    </div>
+
+    <div class="row g-3" id="contactList">
+        <!-- Contact Card 1 -->
+        @for (user of userData?.users ?? []; track $index) {
+        <div class="col-md-4 contact-item">
+            <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="mb-1">{{user.name}}</h5>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+
+    <lib-pagination-controls [currentPage]="currentPage" [pageSize]="pageSize" [totalAmount]="totalAmount" (currentPageChange)="currentPageChange($event)"></lib-pagination-controls>
+
+</div>

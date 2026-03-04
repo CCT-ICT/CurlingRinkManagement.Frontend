@@ -41,7 +41,8 @@ export class RequestSelectorComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     const searchBox = document.getElementById('requestSearchBox');
-    
+
+
     if (searchBox === null) return;
     const keyup$ = fromEvent(searchBox, 'keyup')
 
@@ -56,7 +57,6 @@ export class RequestSelectorComponent implements OnInit, OnChanges {
 
 
   private searchRequests(searchText: string) {
-    console.log("start searching")
     if (searchText === null || searchText === "" || searchText.replaceAll(" ", "") === "") {
       this.selectedRequests = [];
       return;
@@ -76,6 +76,7 @@ export class RequestSelectorComponent implements OnInit, OnChanges {
     this.selectedRequestContact = undefined;
     this.selectedRequestChange.emit(this.selectedRequest);
   }
+
   selectRequest(request: CustomerRequest) {
     this.selectedRequest = request;
     this.selectedRequestContact = this.requestContacts.get(request.id);
