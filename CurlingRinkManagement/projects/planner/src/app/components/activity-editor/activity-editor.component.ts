@@ -9,6 +9,7 @@ import { CustomerRequestService } from '../../services/customer-request.service'
 import { ActivityTypeModel } from '../../models/activity-type.model';
 import { DateTimeRange } from '../../models/date-time-range.model';
 import { SheetTimeInput, dateTimeInputToDates } from '../../models/date-time-input.model';
+import { LinkedInstructor } from '../../models/linked-instructor.model';
 
 @Component({
   selector: 'app-activity-editor',
@@ -50,7 +51,7 @@ export class ActivityEditorComponent implements OnChanges {
         this.selectedRequest = request;
       });
     }
-    this.plannedDates = this.activity.sheetActivities.map((p) => new SheetTimeInput(p.activityTime.start, p.activityTime.end, p.sheetId))
+    this.plannedDates = this.activity.sheetActivities.map((p) => new SheetTimeInput(p.activityTime.start, p.activityTime.end, p.sheetId, p.linkedInstructors.map(i => i.userIdentity)))
     if (this.plannedDates.length == 0 && this.selectedTimeRange) {
       this.plannedDates = [this.selectedTimeRange];
     }
@@ -67,8 +68,14 @@ export class ActivityEditorComponent implements OnChanges {
       let range = dateTimeInputToDates(d);
       planned.start = range[0];
       planned.end = range[1];
-      activity.sheetActivities.push({ sheetId: d.sheetId!, activityTime: planned, activityId: activity.id, id: crypto.randomUUID() });
 
+      let instructors = d.instructorIds.map(id => new LinkedInstructor(id));
+
+      activity.sheetActivities.push({ 
+        sheetId: d.sheetId!, activityTime: planned, activityId: activity.id, id: crypto.randomUUID(), 
+        linkedInstructors: instructors 
+      });
+      
     });
 
     activity.activityTypeId = form.activityTypeId!;

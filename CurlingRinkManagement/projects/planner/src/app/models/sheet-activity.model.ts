@@ -1,11 +1,13 @@
 import { SheetTimeInput, dateTimeInputToDates } from "./date-time-input.model";
 import { DateTimeRange } from "./date-time-range.model";
+import { LinkedInstructor } from "./linked-instructor.model";
 
 export class SheetActivity {
     id: string = '';
     activityTime: DateTimeRange = new DateTimeRange();
     sheetId: string = '';
     activityId: string = '';
+    linkedInstructors: LinkedInstructor[] = [];
     constructor(dateInput: SheetTimeInput, sheetId: string) {
         this.activityTime= new DateTimeRange();
         let range = dateTimeInputToDates(dateInput);

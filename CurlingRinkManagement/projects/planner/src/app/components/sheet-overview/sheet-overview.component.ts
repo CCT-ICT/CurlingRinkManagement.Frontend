@@ -129,7 +129,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     let planned = new DateTimeRange();
     planned.start = this.currentEvent.timeStart;
     planned.end = this.currentEvent.timeEnd;
-    this.selectedTimeRange = new SheetTimeInput(planned.start, planned.end, this.sheet.id);
+    this.selectedTimeRange = new SheetTimeInput(planned.start, planned.end, this.sheet.id, []);
 
     document.getElementById(this.sheet.name);
   }

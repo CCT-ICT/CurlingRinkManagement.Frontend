@@ -1,16 +1,28 @@
-@for(sheetInput of sheetTimeInput; track sheetInput; let i = $index){
+@for(sheetInput of sheetTimeInput; track sheetInput; let sheetIndex = $index){
 <div class="card">
     <div class="dateRangeSelection card-body">
-        <i class="fa-solid fa-trash" (click)="removeDate(i)"></i>
-        <input class="form-control" required [(ngModel)]="sheetInput.date" type="date" name="date" >
+        <i class="fa-solid fa-trash" (click)="removeDate(sheetIndex)"></i><br>
+        <label for="date">Date</label>
+        <input class="form-control" required [(ngModel)]="sheetInput.date" type="date" name="date">
+        <label for="startTime">Start Time</label>
         <input class="form-control" required [(ngModel)]="sheetInput.startTime" type="time" name="startTime">
+        <label for="endTime">End Time</label>
         <input class="form-control" required [(ngModel)]="sheetInput.endTime" type="time" name="endTime">
-        <app-sheet-selector [preSelectedSheetId]="sheetInput.sheetId" (selectedSheetChange)="onSheetChange($event, i)"></app-sheet-selector>
-        <p>Instructors </p>
+        <label >Sheet</label>
+        <app-sheet-selector [preSelectedSheetId]="sheetInput.sheetId"
+            (selectedSheetChange)="onSheetChange($event, sheetIndex)"></app-sheet-selector>
+        <label >Instructors</label>
         @for (instructorId of sheetInput.instructorIds; track instructorId) {
-          <app-user-selector [(selectedUserId)]="sheetInput.instructorIds[$index]"></app-user-selector>
+        <div class="card">
+            <div class="card-body">
+                <i class="fa-solid fa-trash" (click)="removeInstructor(sheetIndex, $index)"></i>
+                <app-user-selector [(selectedUserId)]="sheetInput.instructorIds[$index]"></app-user-selector>
+
+            </div>
+        </div>
         }
-        <button type="button" class="btn btn-sm btn-outline-primary" (click)="addInstructor(sheetInput)"><i class="fa-solid fa-plus"></i></button>
+        <button type="button" class="btn btn-sm btn-outline-primary" (click)="addInstructor(sheetInput)"><i
+                class="fa-solid fa-plus"></i></button>
     </div>
 </div>
 }

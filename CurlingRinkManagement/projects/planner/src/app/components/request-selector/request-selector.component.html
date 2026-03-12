@@ -14,7 +14,6 @@
     <!-- Regular search input -->
     <input id="requestSearchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"  autocomplete="off"
         [(ngModel)]="searchtext" [style.display]="selectedRequest != null? 'none':'block'" placeholder="Search requests...">
-    <p >{{selectedRequest != null}}</p>
 
     <ul class="dropdown-menu" >
         @if(selectedRequests.length == 0){

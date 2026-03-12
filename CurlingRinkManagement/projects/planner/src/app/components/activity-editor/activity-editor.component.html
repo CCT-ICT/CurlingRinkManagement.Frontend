@@ -1,5 +1,5 @@
 <div class="modal" tabindex="-1" style="display: block;">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         @if(isCreating){<h5 class="modal-title">New activity</h5>}
@@ -7,6 +7,7 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="activityForm">
+          <p>Request</p>
           <app-request-selector [(selectedRequest)]="selectedRequest"></app-request-selector>
           <div class="mb-3">
             <label for="activityType" class="form-label">Activity Type</label>

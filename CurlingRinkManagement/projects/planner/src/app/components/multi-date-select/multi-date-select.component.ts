@@ -17,7 +17,8 @@ import { UserSelectorComponent } from "../user-selector/user-selector.component"
   templateUrl: './multi-date-select.component.html',
   styleUrl: './multi-date-select.component.scss'
 })
-export class MultiSheetActivitySelectComponent  {
+export class MultiSheetActivitySelectComponent {
+
 
   @Input()
   public sheetTimeInput: SheetTimeInput[] = []
@@ -41,7 +42,7 @@ export class MultiSheetActivitySelectComponent  {
 
   public addDate() {
     if (this.sheetTimeInput.length == 0) {
-      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), null));
+      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), null, []));
     }
 
     if (this.sheetTimeInput.length < 2 || this.sheetTimeInput[this.sheetTimeInput.length - 1].date === "" || this.sheetTimeInput[this.sheetTimeInput.length - 2].date === "") {
@@ -70,10 +71,14 @@ export class MultiSheetActivitySelectComponent  {
     })
   }
 
-  public addInstructor(sheetTimeInput: SheetTimeInput) {
-      sheetTimeInput.instructorIds.push('');
+  removeInstructor(sheetIndex:number, instructorIndex: number) {
+    this.sheetTimeInput[sheetIndex].instructorIds.splice(instructorIndex, 1);
   }
-  public onSheetChange(sheet:SheetModel | null, index: number) {
+
+  public addInstructor(sheetTimeInput: SheetTimeInput) {
+    sheetTimeInput.instructorIds.push('');
+  }
+  public onSheetChange(sheet: SheetModel | null, index: number) {
     this.sheetTimeInput[index].sheetId = sheet?.id || null;
   }
 }

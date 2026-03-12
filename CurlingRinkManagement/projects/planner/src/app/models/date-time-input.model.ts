@@ -8,11 +8,12 @@ export class SheetTimeInput {
     public sheetId: string | null= ""
     public instructorIds: string[] = []
 
-    constructor(start: Date, end: Date, sheetId: string | null) {
+    constructor(start: Date, end: Date, sheetId: string | null, instructorIds: string[]) {
         this.date = moment(start).format('yyyy-MM-DD');
         this.startTime = moment(start).format('HH:mm');
         this.endTime = moment(end).format('HH:mm');
         this.sheetId = sheetId;
+        this.instructorIds = instructorIds;
     }
 }
 
