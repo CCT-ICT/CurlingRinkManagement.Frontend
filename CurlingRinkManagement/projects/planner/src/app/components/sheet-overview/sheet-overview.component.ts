@@ -50,7 +50,6 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     this.loadActivities();
   }
 
-
   ngOnInit(): void {
     this.loadTimes();
     this.loadActivities();
@@ -172,7 +171,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
     }
     var foundTime = false;
     activity.sheetActivities.forEach(p => {
-      if (this.currentEvent && p.sheetId == this.sheet.id&& this.currentEvent.timeStart == p.activityTime.start && this.currentEvent.timeEnd == p.activityTime.end) {
+      if (this.currentEvent && p.sheetId == this.sheet.id && this.currentEvent.timeStart == p.activityTime.start && this.currentEvent.timeEnd == p.activityTime.end) {
         foundTime = true;
       }
     });
