@@ -19,6 +19,7 @@ import { LinkedInstructor } from '../../models/linked-instructor.model';
 })
 export class ActivityEditorComponent implements OnChanges {
 
+
   @Input()
   public activity: ActivityModel = new ActivityModel();
   @Input()
@@ -51,7 +52,7 @@ export class ActivityEditorComponent implements OnChanges {
         this.selectedRequest = request;
       });
     }
-    this.plannedDates = this.activity.sheetActivities.map((p) => new SheetTimeInput(p.activityTime.start, p.activityTime.end, p.sheetId, p.linkedInstructors.map(i => i.userIdentity)))
+    this.plannedDates = this.activity.sheetActivities.map((p) => new SheetTimeInput(p.activityTime.start, p.activityTime.end, p.sheetId, p.linkedInstructors.map(i => i.userIdentity), p.amountOfInstructors))
     if (this.plannedDates.length == 0 && this.selectedTimeRange) {
       this.plannedDates = [this.selectedTimeRange];
     }
@@ -69,13 +70,14 @@ export class ActivityEditorComponent implements OnChanges {
       planned.start = range[0];
       planned.end = range[1];
 
-      let instructors = d.instructorIds.map(id => new LinkedInstructor(id));
+      let instructors = d.instructorIds.filter(i => i !== '').map(id => new LinkedInstructor(id));
 
-      activity.sheetActivities.push({ 
-        sheetId: d.sheetId!, activityTime: planned, activityId: activity.id, id: crypto.randomUUID(), 
-        linkedInstructors: instructors 
+      activity.sheetActivities.push({
+        sheetId: d.sheetId!, activityTime: planned, activityId: activity.id, id: crypto.randomUUID(),
+        linkedInstructors: instructors,
+        amountOfInstructors: d.amountOfInstructors
       });
-      
+
     });
 
     activity.activityTypeId = form.activityTypeId!;
@@ -104,5 +106,17 @@ export class ActivityEditorComponent implements OnChanges {
 
   close() {
     this.onClose.emit();
+  }
+  deleteActivity() {
+    if (!window.confirm("Are you sure you want to delete this activity? This action cannot be undone.")) return;
+    this.activityService.delete(this.activity.id).subscribe({
+      next: () => {
+        location.reload();
+        this.onClose.emit();
+      },
+      error: e => {
+        console.log(e);
+      }
+    });
   }
 }

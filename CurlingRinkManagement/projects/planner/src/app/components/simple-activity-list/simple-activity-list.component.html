@@ -1,0 +1,22 @@
+@for (activity of activities; track $index) {
+
+<div class="activity-card hoverable" [style.background-color]="getColor(activity)">
+    <div class="innerevent">
+
+        <small class="no-highlight" style="position: relative;">{{activity?.title}}</small>
+        @let request = activity?.customerRequestId ? requestsForActivities.get(activity.customerRequestId!)
+        : undefined;
+        @if(request){
+        <br><small class="no-highlight" style="position: relative;">{{request.title}}</small>
+        <br><small class="no-highlight" style="position: relative;">Amount of people: {{request.amountOfPeople}}</small>
+        <br><small class="no-highlight" style="position: relative;">State: {{getEnumString(request)}}</small>
+        }
+        @for (sheet of activity.sheetActivities; track $index) {
+        <br>
+        <small class="no-highlight" style="position: relative;">{{sheet.activityTime.start.toLocaleString("nl-NL",
+            {hour:"2-digit", minute:"2-digit"})}} - {{sheet.activityTime.end.toLocaleString("nl-NL", {hour:"2-digit",
+            minute:"2-digit"})}}</small>
+}
+    </div>
+</div>
+}

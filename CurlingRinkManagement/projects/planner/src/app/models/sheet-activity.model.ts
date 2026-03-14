@@ -8,6 +8,7 @@ export class SheetActivity {
     sheetId: string = '';
     activityId: string = '';
     linkedInstructors: LinkedInstructor[] = [];
+    amountOfInstructors: number = 0;   
     constructor(dateInput: SheetTimeInput, sheetId: string) {
         this.activityTime= new DateTimeRange();
         let range = dateTimeInputToDates(dateInput);

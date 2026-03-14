@@ -21,7 +21,6 @@ export class BaseApiService<T> {
     }
 
     public getById(id:string): Observable<T> {
-
         return this.httpClient.get<T>(`${this.apiBase}/Api/${this.endpoint}/${id}`, { headers: this.getHeaders()});
     }
 

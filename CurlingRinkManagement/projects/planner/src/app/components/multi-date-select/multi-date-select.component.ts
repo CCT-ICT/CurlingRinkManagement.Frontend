@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SheetTimeInput as SheetTimeInput } from '../../models/date-time-input.model';
 import moment from 'moment';
@@ -17,8 +17,7 @@ import { UserSelectorComponent } from "../user-selector/user-selector.component"
   templateUrl: './multi-date-select.component.html',
   styleUrl: './multi-date-select.component.scss'
 })
-export class MultiSheetActivitySelectComponent {
-
+export class MultiSheetActivitySelectComponent implements OnChanges {
 
   @Input()
   public sheetTimeInput: SheetTimeInput[] = []
@@ -32,6 +31,19 @@ export class MultiSheetActivitySelectComponent {
 
   constructor() { }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    for (let i = 0; i < this.sheetTimeInput.length; i++) {
+      const sheet = this.sheetTimeInput[i];
+      if (sheet.instructorIds.length < sheet.amountOfInstructors) {
+        while (sheet.instructorIds.length < sheet.amountOfInstructors) {
+          sheet.instructorIds.push('');
+        }
+      }
+    }
+  }
+
+
+
 
 
   public removeDate(index: number) {
@@ -42,7 +54,7 @@ export class MultiSheetActivitySelectComponent {
 
   public addDate() {
     if (this.sheetTimeInput.length == 0) {
-      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), null, []));
+      this.sheetTimeInput.push(new SheetTimeInput(new Date(), new Date(), null, [], 0));
     }
 
     if (this.sheetTimeInput.length < 2 || this.sheetTimeInput[this.sheetTimeInput.length - 1].date === "" || this.sheetTimeInput[this.sheetTimeInput.length - 2].date === "") {
@@ -51,7 +63,8 @@ export class MultiSheetActivitySelectComponent {
         startTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].startTime,
         endTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].endTime,
         sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId,
-        instructorIds: []
+        instructorIds: [],
+        amountOfInstructors: 0
       });
       return;
     }
@@ -67,12 +80,14 @@ export class MultiSheetActivitySelectComponent {
       startTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].startTime,
       endTime: this.sheetTimeInput[this.sheetTimeInput.length - 1].endTime,
       sheetId: this.sheetTimeInput[this.sheetTimeInput.length - 1].sheetId,
-      instructorIds: []
+      instructorIds: [],
+      amountOfInstructors: 0
     })
   }
 
-  removeInstructor(sheetIndex:number, instructorIndex: number) {
+  removeInstructor(sheetIndex: number, instructorIndex: number) {
     this.sheetTimeInput[sheetIndex].instructorIds.splice(instructorIndex, 1);
+    this.sheetTimeInput[sheetIndex].amountOfInstructors--;
   }
 
   public addInstructor(sheetTimeInput: SheetTimeInput) {
@@ -80,5 +95,17 @@ export class MultiSheetActivitySelectComponent {
   }
   public onSheetChange(sheet: SheetModel | null, index: number) {
     this.sheetTimeInput[index].sheetId = sheet?.id || null;
+  }
+
+  public adjustInstructorAmount(sheetIndex: number) {
+    let input = this.sheetTimeInput[sheetIndex];
+    if (input.amountOfInstructors < input.instructorIds.length) {
+      input.instructorIds = input.instructorIds.splice(input.amountOfInstructors, input.instructorIds.length - input.amountOfInstructors);
+    }
+    else {
+      while (input.instructorIds.length < input.amountOfInstructors) {
+        input.instructorIds.push('');
+      }
+    }
   }
 }

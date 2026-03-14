@@ -1,5 +1,4 @@
 import moment from "moment"
-import { User } from "../../../../common-api/src/lib/models/user.model"
 
 export class SheetTimeInput {
     public date: string = "" //yyyy-mm-DD
@@ -7,13 +6,15 @@ export class SheetTimeInput {
     public endTime: string = "" //HH:MM
     public sheetId: string | null= ""
     public instructorIds: string[] = []
+    public amountOfInstructors: number = 0;
 
-    constructor(start: Date, end: Date, sheetId: string | null, instructorIds: string[]) {
+    constructor(start: Date, end: Date, sheetId: string | null, instructorIds: string[], amountOfInstructors:number) {
         this.date = moment(start).format('yyyy-MM-DD');
         this.startTime = moment(start).format('HH:mm');
         this.endTime = moment(end).format('HH:mm');
         this.sheetId = sheetId;
         this.instructorIds = instructorIds;
+        this.amountOfInstructors = amountOfInstructors;
     }
 }
 
