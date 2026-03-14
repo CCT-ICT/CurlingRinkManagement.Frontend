@@ -43,9 +43,6 @@ export class MultiSheetActivitySelectComponent implements OnChanges {
   }
 
 
-
-
-
   public removeDate(index: number) {
     if (this.sheetTimeInput.length === 1) return;
 

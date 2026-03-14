@@ -19,6 +19,11 @@ export class UserService {
     return this.httpClient.get<UserData>(`${this.apiBase}/Api/${this.endpoint}/${club}?search=${search}`, { headers: this.getHeaders() });
   }
 
+  public getUserId(): Observable<string> {
+
+    return this.httpClient.get<string>(`${this.apiBase}/Api/${this.endpoint}/myId`, { headers: this.getHeaders() });
+  }
+
 
   public getHeaders() {
     if (this.oauthService.authorizationHeader() === null) {
