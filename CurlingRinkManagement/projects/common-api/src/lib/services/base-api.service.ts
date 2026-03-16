@@ -5,7 +5,7 @@ import { ClubService } from "./club.service";
 
 export class BaseApiService<T> {
     
-    constructor(protected httpClient: HttpClient, private oauthService: OAuthService, protected endpoint: string, private apiBase: string, private clubService: ClubService) { }
+    constructor(protected httpClient: HttpClient, private oauthService: OAuthService, protected endpoint: string, protected apiBase: string, private clubService: ClubService) { }
     
     public getAll(page: number | null = null, amount: number | null = null, filters: string[] | null = null, filterValues: string[] | null = null): Observable<T[]> {
         let params = new HttpParams();

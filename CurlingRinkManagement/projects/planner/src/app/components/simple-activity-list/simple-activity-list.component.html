@@ -1,22 +1,28 @@
 @for (activity of activities; track $index) {
 
-<div class="activity-card hoverable" [style.background-color]="getColor(activity)">
-    <div class="innerevent">
+<div class="card" [style.background-color]="getColor(activity)">
+    <div class="card-body">
+        <div class="innerevent">
 
-        <small class="no-highlight" style="position: relative;">{{activity?.title}}</small>
-        @let request = activity?.customerRequestId ? requestsForActivities.get(activity.customerRequestId!)
-        : undefined;
-        @if(request){
-        <br><small class="no-highlight" style="position: relative;">{{request.title}}</small>
-        <br><small class="no-highlight" style="position: relative;">Amount of people: {{request.amountOfPeople}}</small>
-        <br><small class="no-highlight" style="position: relative;">State: {{getEnumString(request)}}</small>
-        }
-        @for (sheet of activity.sheetActivities; track $index) {
-        <br>
-        <small class="no-highlight" style="position: relative;">{{sheet.activityTime.start.toLocaleString("nl-NL",
-            {hour:"2-digit", minute:"2-digit"})}} - {{sheet.activityTime.end.toLocaleString("nl-NL", {hour:"2-digit",
-            minute:"2-digit"})}}</small>
-}
+            <b class="no-highlight" style="position: relative;">{{getTitle(activity)}}</b>
+            @for (sheet of activity.sheetActivities; track $index) {
+            <div class="card">
+                <div class="card-header">
+                    {{sheet.activityTime.start.toLocaleString("nl-NL", {day:"2-digit", month:"2-digit",
+                    year:"numeric",
+                    hour:"2-digit", minute:"2-digit"})}} -
+                    {{sheet.activityTime.end.toLocaleString("nl-NL", {hour:"2-digit", minute:"2-digit"})}}
+                </div>
+                <div class="card-body">
+                    <span>{{sheet.linkedInstructors.length}}/{{sheet.amountOfInstructors}} Instructors</span>
+                    <br>
+                    @if(allowAddingInstructors){
+                    <button class="btn btn-primary" (click)="addUserAsInstructor(sheet)">Sign up as instructor</button>
+                    }
+                </div>
+            </div>
+            }
+        </div>
     </div>
 </div>
 }

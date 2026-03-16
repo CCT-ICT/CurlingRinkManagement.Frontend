@@ -11,6 +11,7 @@ import { BaseApiService, ClubService } from '../../../../common-api/src/public-a
 })
 export class ActivityService extends BaseApiService<ActivityModel> {
 
+
   constructor(httpClient: HttpClient, oauthService: OAuthService, clubService: ClubService) { super(httpClient, oauthService, "Activity", environment.plannerApiUrl, clubService) }
 
   public getInRange(sheetId: string, start: Date, end: Date): Observable<ActivityModel[]> {
@@ -45,11 +46,31 @@ export class ActivityService extends BaseApiService<ActivityModel> {
       );
   }
 
+  public getWithMissingInstructors(start: Date): Observable<ActivityModel[]> {
+
+    var filters = ["MissingInstructors", "StartDate"];
+    var filterValues = ["true", start.toJSON()];
+
+    return this.getAll(null, null, filters, filterValues)
+      .pipe(
+        map(activities => {
+          activities.forEach(a => {
+            this.mapDates(a);
+          })
+          return activities;
+        })
+      );
+  }
+
   public override getById(id: string): Observable<ActivityModel> {
     return this.getById(id)
       .pipe(
         map(this.mapDates)
       );
+  }
+
+  public addUserAsInstructor(activityId: string, sheetActivityId: string, userId: string) {
+    return this.httpClient.put<ActivityModel>(`${this.apiBase}/Api/${this.endpoint}/${activityId}/${sheetActivityId}/${userId}`, null, { headers: this.getHeaders() });
   }
 
   public mapDates(activity: ActivityModel): ActivityModel {

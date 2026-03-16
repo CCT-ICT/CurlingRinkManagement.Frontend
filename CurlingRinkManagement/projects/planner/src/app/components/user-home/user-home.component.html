@@ -1,1 +1,15 @@
-<app-simple-activity-list [activities]="myActivities" [activityTypes]="activityTypes"></app-simple-activity-list>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <h2>My Activities</h2>
+            <app-simple-activity-list [activities]="myActivities"
+                [activityTypes]="activityTypes"></app-simple-activity-list>
+        </div>
+        <div class="col"></div>
+        <div class="col-4">
+            <h2>Activities Missing Instructors</h2>
+            <app-simple-activity-list [activities]="activitiesMissingInstructor" [activityTypes]="activityTypes"
+                [userId]="myUserId" [allowAddingInstructors]="true" (instructorAdded)="onInstructorAdded($event)"></app-simple-activity-list>
+        </div>
+    </div>
+</div>
