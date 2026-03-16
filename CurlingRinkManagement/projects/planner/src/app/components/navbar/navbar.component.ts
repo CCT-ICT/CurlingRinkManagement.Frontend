@@ -24,10 +24,11 @@ export class NavbarComponent implements OnInit {
       .subscribe((_) => {
         this.oauthService.loadUserProfile();
         this.userName = this.getUserName();
+        location.reload();
       });
   }
   ngOnInit(): void {
-        this.userName = this.getUserName();
+    this.userName = this.getUserName();
 
   }
 

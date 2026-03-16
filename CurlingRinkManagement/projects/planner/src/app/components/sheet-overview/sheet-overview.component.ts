@@ -36,6 +36,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   public events: EventModel[] = []
 
   public isCreating: boolean = false;
+  private isCreatingStart: number | null = null;
   public selectedTimeRange: SheetTimeInput | null = null;
 
   public requestsForActivities: Map<string, CustomerRequest> = new Map<string, CustomerRequest>();
@@ -43,8 +44,12 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   constructor(private activityService: ActivityService, private requestService: CustomerRequestService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.reload();
+  }
+  reload() {
     this.times = [];
     this.events = [];
+    this.currentEvent = null;
     this.isCreating = false;
     this.loadTimes();
     this.loadActivities();
@@ -107,6 +112,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   startClick(time: Date) {
     if (this.isCreating) return;
     this.isCreating = true;
+    this.isCreatingStart =  Date.now();
     this.currentEvent = {
       timeStart: time,
       originalStart: time,
@@ -122,7 +128,7 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
   }
 
   endClick(time: Date) {
-    if (this.currentEvent == null || this.currentEvent.activity !== null) return;
+    if (this.currentEvent == null || this.currentEvent.activity !== null || (this.isCreatingStart && Date.now() - this.isCreatingStart  < 100)) return;
     this.changeEndTime(time);
     this.currentEvent.activity = new ActivityModel();
     let planned = new DateTimeRange();
@@ -175,13 +181,16 @@ export class SheetOverviewComponent implements OnInit, OnChanges {
         foundTime = true;
       }
     });
-    if (!foundTime) {
-      location.reload();
-    }
 
     this.currentEvent = null;
     this.isCreating = false;
+    if (!foundTime) {
+      this.reload();
+    }
+  }
 
+  public onDeleted() {
+    this.reload();
   }
 
   public onClose() {

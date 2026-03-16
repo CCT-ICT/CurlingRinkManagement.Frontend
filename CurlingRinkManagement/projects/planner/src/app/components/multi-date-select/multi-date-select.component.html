@@ -13,7 +13,7 @@
             (selectedSheetChange)="onSheetChange($event, sheetIndex)"></app-sheet-selector>
         <b >Instructors</b><br>
         <label for="amountOfInstructors">Amount of instructors</label>
-        <input type="number" class="form-control mb-2" [(ngModel)]="sheetInput.amountOfInstructors" min="0" (change)="adjustInstructorAmount(sheetIndex)"/>
+        <input name="amountOfInstructors" type="number" class="form-control mb-2" [(ngModel)]="sheetInput.amountOfInstructors" min="0" (change)="adjustInstructorAmount(sheetIndex)"/>
         @for (instructorId of sheetInput.instructorIds; track instructorId) {
         <div class="card">
             <div class="card-body">

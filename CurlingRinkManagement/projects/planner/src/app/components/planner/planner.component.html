@@ -5,7 +5,7 @@
         <input type="date" class="form-control " [(ngModel)]="dateString" id="plannerDate">
       </div>
     </div>
-
+    <div class="col-1"><button class="btn btn-primary" (click)="reload()"><i class="fa-solid fa-arrow-rotate-right"></i></button></div>
     <div class="col"></div>
     @if(this.sheets.length > this.showAmountOfSheets){
     <div class="sheet-controll col-2">

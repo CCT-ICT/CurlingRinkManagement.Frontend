@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { User } from '../../../../../common-api/src/lib/models/user.model';
 import { ClubService, UserService } from '../../../../../common-api/src/public-api';
-import { debounceTime, fromEvent, map } from 'rxjs';
+import { debounceTime, filter, fromEvent, map, merge, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './user-selector.component.html',
   styleUrl: './user-selector.component.scss'
 })
-export class UserSelectorComponent implements AfterViewInit  {
+export class UserSelectorComponent implements AfterViewInit {
   @ViewChild('userSearchBox') searchBox: ElementRef | null = null;
   public users: User[] = [];
   public selectedUser: User | null = null;
@@ -24,13 +24,15 @@ export class UserSelectorComponent implements AfterViewInit  {
 
   public showContactCreation: boolean = false;
 
-  constructor(private userService: UserService, private clubService: ClubService) { }
+  constructor(private userService: UserService, private clubService: ClubService, private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit(): void {
     if (this.searchBox === null) return;
-    const keyup$ = fromEvent(this.searchBox.nativeElement, 'keyup')
-
-    keyup$.pipe(
+    const keyup$ = fromEvent(this.searchBox.nativeElement, 'keyup');
+    const enterPress$ = fromEvent(this.searchBox.nativeElement, 'keydown').pipe(
+      filter((e: any) => e.key === 'Enter')
+    );
+    merge(keyup$, enterPress$).pipe(
       map((i: any) => i.currentTarget.value),
       debounceTime(200)
     )
@@ -52,16 +54,16 @@ export class UserSelectorComponent implements AfterViewInit  {
     if (!club) return;
     this.userService.getAll(club, searchText).subscribe((users) => {
       users.users.forEach(user => {
-        if(user.identity === this.selectedUserId) {
+        if (user.identity === this.selectedUserId) {
           this.selectedUser = user;
         }
       });
       this.users = users.users;
+      this.cdr.detectChanges();
     });
   }
 
   public selectUser(user: User) {
-    console.log(user);
     this.selectedUser = user;
     this.selectedUserId = user.identity;
     this.selectedUserIdChange.emit(this.selectedUserId);

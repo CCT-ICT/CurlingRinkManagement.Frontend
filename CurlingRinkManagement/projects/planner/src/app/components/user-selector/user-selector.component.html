@@ -19,7 +19,7 @@
         <li><span class="dropdown-text">No users found (Start typing to try get a new match)</span></li>
         }
         @for(user of users; track user.identity){
-        <li><span class="dropdown-item" (click)="selectUser(user)">{{user.name}} </span></li>
+        <li><span class="dropdown-item" [attr.user]="user.name" (click)="selectUser(user)">{{user.name}}</span></li>
         }
     </ul>
 </div>

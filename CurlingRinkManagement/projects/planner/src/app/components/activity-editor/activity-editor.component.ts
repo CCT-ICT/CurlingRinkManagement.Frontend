@@ -32,6 +32,8 @@ export class ActivityEditorComponent implements OnChanges {
   public activityChanged = new EventEmitter<ActivityModel>();
   @Output()
   public onClose = new EventEmitter<void>();
+  @Output()
+  public onDeleted = new EventEmitter<void>();
 
   public plannedDates: SheetTimeInput[] = [];
   public selectedRequest: CustomerRequest | null = null;
@@ -111,8 +113,8 @@ export class ActivityEditorComponent implements OnChanges {
     if (!window.confirm("Are you sure you want to delete this activity? This action cannot be undone.")) return;
     this.activityService.delete(this.activity.id).subscribe({
       next: () => {
-        location.reload();
         this.onClose.emit();
+        this.onDeleted.emit();
       },
       error: e => {
         console.log(e);

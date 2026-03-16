@@ -38,6 +38,7 @@ export class ClubService {
 
   public setCurrentClub(club: Club) {
     localStorage.setItem("selected-club", JSON.stringify(club));
+    location.reload();
   }
 
   public getHeaders() {

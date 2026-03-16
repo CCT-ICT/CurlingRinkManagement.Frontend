@@ -1,11 +1,11 @@
-<div style="border: solid black 1px; border-bottom: 0px;overflow: hidden">
+<div style="border: solid black 1px; border-bottom: 0px;overflow: hidden" [id]="sheet.id">
   @for(time of times; track time){
-  <div (mousedown)="startClick(time)" (mouseenter)="hover(time)" (mouseup)="endClick(time)" [attr.data]="time"
+  <div (mousedown)="startClick(time)" (mouseenter)="hover(time)" (mouseup)="endClick(time)" [attr.time]="time.toLocaleString('nl-NL',{hour:'2-digit', minute:'2-digit'})"
     [style.height]="heightInPixels/4 + 'px'" [style.border-bottom]="time.getMinutes() === 45? '1px solid black':''">
 
     @let event = getEvent(time);
     @if(event != null){
-    <div class="activity-card hoverable" [class.transparant]="event.activity === null" style="z-index: 1;"
+    <div [attr.title]="event.activity?.title" class="activity-card hoverable" [class.transparant]="event.activity === null" style="z-index: 1;"
       [style.background-color]="getColor(event)" [style.height]="getLength(event)/60*heightInPixels + 'px'"
       [attr.start]="event.timeStart" [attr.end]="event.timeEnd"
       (mousedown)="selectEvent(event); $event.stopPropagation()">
@@ -33,5 +33,5 @@
 @if(currentEvent !== null && currentEvent.activity !== null){
 <app-activity-editor [activity]="currentEvent.activity" [selectedTimeRange]="selectedTimeRange"
   [activityTypes]="activityTypes" [isCreating]="isCreating" (activityChanged)="onActivityUpdated($event)"
-  (onClose)="onClose()"></app-activity-editor>
+  (onClose)="onClose()" (onDeleted)="onDeleted()"></app-activity-editor>
 }

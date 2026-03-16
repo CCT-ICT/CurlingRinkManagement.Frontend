@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 export class PlannerComponent {
 
 
+
   public sheets: SheetModel[] = [];
   public selectedSheets: SheetModel[] = [];
   public activityTypes: ActivityTypeModel[] = [];
@@ -47,6 +48,11 @@ export class PlannerComponent {
       this.sheets.sort((s1, s2) => s1.order - s2.order)
       this.selectedSheets = this.sheets.slice(this.sheetIndexOffset, this.sheetIndexOffset + this.showAmountOfSheets);
     })
+  }
+
+  reload() {
+    this.sheets = [];
+    this.loadSheets();
   }
 
   canGoPrevious(): boolean {
