@@ -19,7 +19,7 @@
         <li><span class="dropdown-text">No contacts found (Start typing to try get a new match)</span></li>
         }
         @for(contact of contacts; track contact.id){
-        <li><span class="dropdown-item" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
+        <li><span class="dropdown-item" [attr.email]="contact.email" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
                 {{contact.lastName}} ({{contact.email}})</span></li>
         }
         <li>

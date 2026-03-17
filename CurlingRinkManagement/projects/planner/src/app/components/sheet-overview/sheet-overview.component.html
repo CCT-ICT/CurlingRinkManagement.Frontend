@@ -1,18 +1,20 @@
 <div style="border: solid black 1px; border-bottom: 0px;overflow: hidden" [id]="sheet.id">
   @for(time of times; track time){
-  <div (mousedown)="startClick(time)" (mouseenter)="hover(time)" (mouseup)="endClick(time)" [attr.time]="time.toLocaleString('nl-NL',{hour:'2-digit', minute:'2-digit'})"
+  <div (mousedown)="startClick(time)" (mouseenter)="hover(time)" (mouseup)="endClick(time)"
+    [attr.time]="time.toLocaleString('nl-NL',{hour:'2-digit', minute:'2-digit'})"
     [style.height]="heightInPixels/4 + 'px'" [style.border-bottom]="time.getMinutes() === 45? '1px solid black':''">
 
     @let event = getEvent(time);
     @if(event != null){
-    <div [attr.title]="event.activity?.title" class="activity-card hoverable" [class.transparant]="event.activity === null" style="z-index: 1;"
-      [style.background-color]="getColor(event)" [style.height]="getLength(event)/60*heightInPixels + 'px'"
-      [attr.start]="event.timeStart" [attr.end]="event.timeEnd"
-      (mousedown)="selectEvent(event); $event.stopPropagation()">
+    <div [attr.title]="event.activity?.title" class="activity-card hoverable"
+      [class.transparant]="event.activity === null" style="z-index: 1;" [style.background-color]="getColor(event)"
+      [style.height]="getLength(event)/60*heightInPixels + 'px'" [attr.start]="event.timeStart"
+      [attr.end]="event.timeEnd" (mousedown)="selectEvent(event); $event.stopPropagation()">
+      @if(event.activity !== null){
       <div class="innerevent">
 
-        <small class="no-highlight" style="position: relative;">{{event.activity?.title}}</small>
-        @let request = event.activity?.customerRequestId ? requestsForActivities.get(event.activity!.customerRequestId!)
+        <small class="no-highlight" style="position: relative;">{{event.activity.title}}</small>
+        @let request = event.activity.customerRequestId ? requestsForActivities.get(event.activity!.customerRequestId!)
         : undefined;
         @if(request && getLength(event) >= 120){
         <br><small class="no-highlight" style="position: relative;">{{request.title}}</small>
@@ -24,6 +26,7 @@
           {hour:"2-digit", minute:"2-digit"})}} - {{event.timeEnd.toLocaleString("nl-NL", {hour:"2-digit",
           minute:"2-digit"})}}</small>
       </div>
+      }
     </div>
     }
   </div>

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, input, OnInit, Output, ViewChild } from '@angular/core';
-import { debounceTime, filter, fromEvent, map } from 'rxjs';
+import { debounceTime, filter, fromEvent, map, merge } from 'rxjs';
 import { ContactService } from '../../services/contact.service';
 import { ContactModel } from '../../models/contact-model';
 import { FormsModule } from '@angular/forms';
@@ -30,8 +30,10 @@ export class ContactSelectorComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     if (this.searchBox === null) return;
     const keyup$ = fromEvent(this.searchBox.nativeElement, 'keyup')
-
-    keyup$.pipe(
+    const enterPress$ = fromEvent(this.searchBox.nativeElement, 'keydown').pipe(
+      filter((e: any) => e.key === 'Enter')
+    );
+    merge(keyup$, enterPress$).pipe(
       map((i: any) => i.currentTarget.value),
       debounceTime(200)
     )

@@ -35,6 +35,11 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
 
   constructor(private customerRequestService: CustomerRequestService, private contactService: ContactService, private activityService: ActivityService) { super() }
 
+  ngOnInit(): void {
+    this.loadEntities();
+    this.loadAmount();
+  }
+
   override loadEntities(): void {
     this.customerRequestService.getAll(this.currentPage, this.pageSize).subscribe(requests => {
       console.log(requests);
@@ -46,9 +51,18 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
     })
   }
 
-  ngOnInit(): void {
-    this.loadEntities();
+  private loadAmount() {
+    let filters: string[] | null = null;
+    let filterValues: string[] | null = null;
+    if (this.searchText.length > 0) {
+      filters = ["Generic"];
+      filterValues = [this.searchText];
+    }
+    this.contactService.getAmount(filters, filterValues).subscribe(c => {
+      this.totalAmount = c
+    });
   }
+
 
   getContact(id: string | null): ContactModel | undefined {
     if (id === null)
