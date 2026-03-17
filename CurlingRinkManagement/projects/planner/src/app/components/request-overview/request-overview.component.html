@@ -10,7 +10,6 @@
     </div>
 
     <div class="row g-3" id="contactList">
-        <!-- Contact Card 1 -->
         @for (request of requests; track $index) {
         <div class="col-md-4 contact-item">
             <div class="card p-3">
@@ -40,6 +39,18 @@
                 @if(expended === request.id){
                 <div class="mt-3 contact-details">
                     <p class="mb-1"><strong>Additional:</strong> {{request.additionalInfo}}</p>
+                    <p>Planned times</p>
+                    @if(currentActivity === null){
+                    <p>Currently no activity is linked</p>
+                    }
+                    @else if(currentActivity === undefined) {
+                    <p>Loading...</p>
+                    }
+                    @else {
+                    @for (item of getPlannedTimes(currentActivity); track $index) {
+                    <p class="mb-1">{{item.toLocaleString("nl-NL", {hour:"2-digit", minute:"2-digit"})}}</p>
+                    }
+                    }
                 </div>
                 }
             </div>
@@ -57,8 +68,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                @if(requestToEdit === null){<h5 class="modal-title">New contact</h5>}
-                @else{<h5 class="modal-title">Edit contact</h5>}
+                @if(requestToEdit === null){<h5 class="modal-title">New request</h5>}
+                @else{<h5 class="modal-title">Edit request</h5>}
             </div>
             <div class="modal-body">
                 <app-request-editor [selectedRequest]="requestToEdit" (successfulAction)="requestEdited($event)"
@@ -67,4 +78,4 @@
         </div>
     </div>
 </div>
-} 
+}

@@ -1,20 +1,42 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-2">
-      <input type="date" class="form-control date-input" [(ngModel)]="dateString" id="plannerDate">
+      <div class="date-input">
+        <input type="date" class="form-control " [(ngModel)]="dateString" id="plannerDate">
+      </div>
     </div>
+    <div class="col-1"><button class="btn btn-primary" (click)="reload()"><i class="fa-solid fa-arrow-rotate-right"></i></button></div>
+    <div class="col"></div>
+    @if(this.sheets.length > this.showAmountOfSheets){
+    <div class="sheet-controll col-2">
+      <button [disabled]="!canGoPrevious()" class="btn btn-outline-primary" (click)="previousSheets()"><i
+          class="fa-solid fa-chevron-left"></i></button>
+
+
+      <button [disabled]="!canGoNext()" class="btn btn-outline-primary" (click)="nextSheets()"><i
+          class="fa-solid fa-chevron-right"></i></button>
+    </div>
+    }
   </div>
 </div>
-
 <div class="scroll-container">
+  <div class="time-overview"></div>
+  @for(sheet of selectedSheets; track sheet.id){
+  <div class="sheet-header">
+    <div class="sheet-header-text">
+      {{sheet.name}}
+    </div>
+  </div>
+  }
+  <br>
   <div class="time-overview">
     <app-time-overview></app-time-overview>
   </div>
 
   <div #sheetsContainer class="sheets-container">
-    @for(sheet of sheets; track sheet.id){
+    @for(sheet of selectedSheets; track sheet.id){
     <div class="sheet-item">
-      <div>{{sheet.name}}</div>
+
       <app-sheet-overview [sheet]="sheet" [activityTypes]="activityTypes" [dayString]="dateString"></app-sheet-overview>
     </div>
     }

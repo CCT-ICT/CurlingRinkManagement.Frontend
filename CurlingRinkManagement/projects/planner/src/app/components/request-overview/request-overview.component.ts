@@ -6,6 +6,8 @@ import { PaginationControlsComponent } from "../../../../../common-api/src/lib/c
 import { CustomerRequestService } from '../../services/customer-request.service';
 import { RequestEditorComponent } from "../request-editor/request-editor.component";
 import { ContactService } from '../../services/contact.service';
+import { ActivityModel } from '../../models/activity.model';
+import { ActivityService } from '../../services/activity.service';
 
 @Component({
   selector: 'app-request-overview',
@@ -22,15 +24,25 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
   public contacts: Map<string, ContactModel> = new Map<string, ContactModel>([
   ]);
 
+  public loadedActivities: Map<string, ActivityModel> = new Map<string, ActivityModel>([
+  ]);
+
   public expended: string | null = null;
+  public currentActivity: ActivityModel | null | undefined = undefined;
   public showRequestModal: boolean = false;
   public requestToEdit: CustomerRequest | null = null;
   public searchText: string = '';
 
-  constructor(private customerRequestService: CustomerRequestService, private contactService: ContactService) { super() }
+  constructor(private customerRequestService: CustomerRequestService, private contactService: ContactService, private activityService: ActivityService) { super() }
+
+  ngOnInit(): void {
+    this.loadEntities();
+    this.loadAmount();
+  }
 
   override loadEntities(): void {
     this.customerRequestService.getAll(this.currentPage, this.pageSize).subscribe(requests => {
+      console.log(requests);
       this.requests = requests;
       var contactIds = [... new Set(this.requests.map(r => r.contactId))];
       contactIds.forEach(id => {
@@ -39,9 +51,18 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
     })
   }
 
-  ngOnInit(): void {
-    this.loadEntities();
+  private loadAmount() {
+    let filters: string[] | null = null;
+    let filterValues: string[] | null = null;
+    if (this.searchText.length > 0) {
+      filters = ["Generic"];
+      filterValues = [this.searchText];
+    }
+    this.contactService.getAmount(filters, filterValues).subscribe(c => {
+      this.totalAmount = c
+    });
   }
+
 
   getContact(id: string | null): ContactModel | undefined {
     if (id === null)
@@ -57,7 +78,7 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
 
   requestEdited(request: CustomerRequest) {
     this.showRequestModal = false
-    if(this.requestToEdit == null) {
+    if (this.requestToEdit == null) {
       this.requests.push(request);
       return;
     }
@@ -67,10 +88,23 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
   }
 
   public expend(id: string) {
-    if (id === this.expended)
+    if (id === this.expended) {
       this.expended = null;
-    else
+      this.currentActivity = undefined;
+    }
+    else {
       this.expended = id;
+      let activityId = this.requests.find(r => r.id === id)?.activityId;
+      if (!this.loadedActivities.has(id) && activityId) {
+        this.activityService.getById(activityId).subscribe(activity => {
+          this.loadedActivities.set(id, activity);
+          console.log(activity);
+          this.currentActivity = activity;
+        });
+      } else {
+        this.currentActivity = this.loadedActivities.get(id) ?? null;
+      }
+    }
   }
 
   public currentPageChange(newPage: number) {
@@ -85,5 +119,16 @@ export class RequestOverviewComponent extends BasePaginationPageComponent implem
   public resetForm() {
     this.showRequestModal = false;
     this.requestToEdit = null;
+  }
+
+  public getPlannedTimes(activity: ActivityModel): Date[] {
+    console.log(activity);
+    let times = activity.sheetActivities.map(sa => {
+      return sa.activityTime.start;
+    }).filter(function (item, pos, self) {
+      return self.indexOf(item) == pos;
+    });
+
+    return times;
   }
 }

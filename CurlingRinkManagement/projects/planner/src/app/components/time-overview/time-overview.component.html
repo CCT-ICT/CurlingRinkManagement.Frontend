@@ -1,5 +1,8 @@
-    @for(time of times; track time){
-    <div [style.height]="heightInPixels + 'px'" style="padding-right: 5px;" >
-        <div style="text-align: right;">{{time.toLocaleString("nl-NL", {hour:"2-digit", minute:"2-digit"})}}</div>
-    </div>
-    }
+@for(time of times; track time){
+<div [style.height]="heightInPixels + 'px'" style="padding-right: 5px;">
+    <div style="text-align: right;">{{time.toLocaleString("nl-NL", {hour:"2-digit", minute:"2-digit"})}}</div>
+</div>
+@if(time.getHours() === scrollToHour && time.getMinutes() === scrollToMinute){
+<div style="visibility: hidden;" id="anchor"></div>
+}
+}

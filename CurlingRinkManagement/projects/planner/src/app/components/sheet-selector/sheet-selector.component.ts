@@ -35,7 +35,7 @@ export class SheetSelectorComponent implements OnInit, OnChanges {
 
   private loadSheets() {
     this.sheetService.getAll().subscribe((sheets) => {
-      this.sheets = sheets;
+      this.sheets = sheets.sort((a, b) => a.order - b.order);
       if (this.selectedSheet == null && this.preSelectedSheetId != null) {
         this.selectedSheet = this.sheets.find(s => s.id === this.preSelectedSheetId) ?? null;
       }

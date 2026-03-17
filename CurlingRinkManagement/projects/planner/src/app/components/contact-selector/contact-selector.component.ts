@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, input, OnInit, Output } from '@angular/core';
-import { debounceTime, filter, fromEvent, map } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, input, OnInit, Output, ViewChild } from '@angular/core';
+import { debounceTime, filter, fromEvent, map, merge } from 'rxjs';
 import { ContactService } from '../../services/contact.service';
 import { ContactModel } from '../../models/contact-model';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,8 @@ import { ContactEditorComponent } from "../contact-editor/contact-editor.compone
   templateUrl: './contact-selector.component.html',
   styleUrl: './contact-selector.component.scss'
 })
-export class ContactSelectorComponent implements OnInit {
+export class ContactSelectorComponent implements AfterViewInit {
+  @ViewChild('contactSearchBox') searchBox: ElementRef | null = null;
 
   public contacts: ContactModel[] = [];
 
@@ -26,12 +27,13 @@ export class ContactSelectorComponent implements OnInit {
 
   constructor(private contactService: ContactService) { }
 
-  ngOnInit(): void {
-    const searchBox = document.getElementById('contactSearchBox');
-    if (searchBox === null) return;
-    const keyup$ = fromEvent(searchBox, 'keyup')
-
-    keyup$.pipe(
+  ngAfterViewInit(): void {
+    if (this.searchBox === null) return;
+    const keyup$ = fromEvent(this.searchBox.nativeElement, 'keyup')
+    const enterPress$ = fromEvent(this.searchBox.nativeElement, 'keydown').pipe(
+      filter((e: any) => e.key === 'Enter')
+    );
+    merge(keyup$, enterPress$).pipe(
       map((i: any) => i.currentTarget.value),
       debounceTime(200)
     )

@@ -15,7 +15,17 @@ export class ClubSelectComponent implements OnInit {
   ngOnInit(): void {
     this.clubService.getAll().subscribe(clubs => {
       this.clubs = clubs;
+      this.checkCurrentClub();
     })
+  }
+
+
+
+  private checkCurrentClub() {
+    let currentClub = this.clubService.getCurrentClub();
+    if ((currentClub == null || this.clubs.find(c => c.id === currentClub?.id) == null) && this.clubs.length > 0) {
+      this.clubService.setCurrentClub(this.clubs[0]);
+    }
   }
 
   public get currentClubName(): string | null {

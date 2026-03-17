@@ -15,11 +15,8 @@
                     <div class="col-4">
                         <p>Title</p>
                     </div>
-                    <div class="col-3">
-                        <p>Recommended maintenance before</p>
-                    </div>
-                    <div class="col-3">
-                        <p>Recommended maintenance after</p>
+                    <div class="col-6">
+                        <label class="form-label">Instructors for activity (per timeblok)</label>
                     </div>
                     <div class="col-2">
                         <input class="form-control form-control-color" type="color" name="color"
@@ -28,13 +25,30 @@
                     <div class="col-4">
                         <input class="form-control" required type="text" name="type" [(ngModel)]="activityType.type">
                     </div>
-                    <div class="col-3">
-                        <input class="form-control" required type="number" name="minutesBefore"
-                            [(ngModel)]="activityType.recommendedMinutesBlockedBefore">
-                    </div>
-                    <div class="col-3">
-                        <input class="form-control" required type="number" name="minutesAfter"
-                            [(ngModel)]="activityType.recommendedMinutesBlockedAfter">
+
+                    <div class="col-6">
+                        <div class="input-group">
+
+                            <!-- Amount -->
+                            <input type="number" class="form-control" [(ngModel)]="activityType.amountOfInstructors"
+                                min="0" placeholder="Amount">
+
+                            <!-- Static text "per" -->
+                            <span class="input-group-text">instructors per</span>
+
+                            <!-- Per Selected Value -->
+                            <input type="number" class="form-control" [(ngModel)]="activityType.perSelectedValue"
+                                min="0" placeholder="Value">
+
+                            <!-- Calculation Type -->
+                            <select class="form-select" [(ngModel)]="activityType.instructorCalculationType">
+                                <option [ngValue]="CalculationType.People">People</option>
+                                <option [ngValue]="CalculationType.Sheet">Sheet</option>
+                                <option [ngValue]="CalculationType.Activity">Activity</option>
+                            </select>
+
+                        </div>
+
                     </div>
                 </div>
             </div>

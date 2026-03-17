@@ -1,10 +1,28 @@
-@for(date of dates; track date; let i = $index){
+@for(sheetInput of sheetTimeInput; track sheetInput; let sheetIndex = $index){
 <div class="card">
     <div class="dateRangeSelection card-body">
-        <i class="fa-solid fa-trash" (click)="removeDate(i)"></i>
-        <input class="form-control" required [(ngModel)]="date.date" type="date" name="date" >
-        <input class="form-control" required [(ngModel)]="date.startTime" type="time" name="startTime">
-        <input class="form-control" required [(ngModel)]="date.endTime" type="time" name="endTime">
+        <i class="fa-solid fa-trash" (click)="removeDate(sheetIndex)"></i><br>
+        <label for="date">Date</label>
+        <input class="form-control" required [(ngModel)]="sheetInput.date" type="date" name="date">
+        <label for="startTime">Start Time</label>
+        <input class="form-control" required [(ngModel)]="sheetInput.startTime" type="time" name="startTime">
+        <label for="endTime">End Time</label>
+        <input class="form-control" required [(ngModel)]="sheetInput.endTime" type="time" name="endTime">
+        <label >Sheet</label>
+        <app-sheet-selector [preSelectedSheetId]="sheetInput.sheetId"
+            (selectedSheetChange)="onSheetChange($event, sheetIndex)"></app-sheet-selector>
+        <b >Instructors</b><br>
+        <label for="amountOfInstructors">Amount of instructors</label>
+        <input name="amountOfInstructors" type="number" class="form-control mb-2" [(ngModel)]="sheetInput.amountOfInstructors" min="0" (change)="adjustInstructorAmount(sheetIndex)"/>
+        @for (instructorId of sheetInput.instructorIds; track instructorId) {
+        <div class="card">
+            <div class="card-body">
+                <i class="fa-solid fa-trash" (click)="removeInstructor(sheetIndex, $index)"></i>
+                <app-user-selector [(selectedUserId)]="sheetInput.instructorIds[$index]"></app-user-selector>
+
+            </div>
+        </div>
+        }
     </div>
 </div>
 }

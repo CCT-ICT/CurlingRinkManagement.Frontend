@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { CustomerRequest } from '../../models/customer-request.model';
 import { ContactModel } from '../../models/contact-model';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, fromEvent, map } from 'rxjs';
+import { debounceTime, filter, fromEvent, map, merge } from 'rxjs';
 import { RequestEditorComponent } from "../request-editor/request-editor.component";
 import { CustomerRequestService } from '../../services/customer-request.service';
 import { ContactService } from '../../services/contact.service';
@@ -14,6 +14,7 @@ import { ContactService } from '../../services/contact.service';
   styleUrl: './request-selector.component.scss'
 })
 export class RequestSelectorComponent implements OnInit, OnChanges {
+  @ViewChild('requestSearchBox') searchBox: ElementRef | null = null;
 
   @Input()
   public selectedRequest: CustomerRequest | null = null;
@@ -40,12 +41,13 @@ export class RequestSelectorComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    const searchBox = document.getElementById('requestSearchBox');
-    
-    if (searchBox === null) return;
-    const keyup$ = fromEvent(searchBox, 'keyup')
 
-    keyup$.pipe(
+    if (this.searchBox === null) return;
+    const keyup$ = fromEvent(this.searchBox.nativeElement, 'keyup')
+    const enterPress$ = fromEvent(this.searchBox.nativeElement, 'keydown').pipe(
+      filter((e: any) => e.key === 'Enter')
+    );
+    merge(keyup$, enterPress$).pipe(
       map((i: any) => i.currentTarget.value),
       debounceTime(200)
     )
@@ -56,7 +58,6 @@ export class RequestSelectorComponent implements OnInit, OnChanges {
 
 
   private searchRequests(searchText: string) {
-    console.log("start searching")
     if (searchText === null || searchText === "" || searchText.replaceAll(" ", "") === "") {
       this.selectedRequests = [];
       return;
@@ -76,6 +77,7 @@ export class RequestSelectorComponent implements OnInit, OnChanges {
     this.selectedRequestContact = undefined;
     this.selectedRequestChange.emit(this.selectedRequest);
   }
+
   selectRequest(request: CustomerRequest) {
     this.selectedRequest = request;
     this.selectedRequestContact = this.requestContacts.get(request.id);

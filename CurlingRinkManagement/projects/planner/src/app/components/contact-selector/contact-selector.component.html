@@ -10,7 +10,7 @@
     </div>
     }
     <!-- Regular search input -->
-    <input id="contactSearchBox" class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" autocomplete="off"
+    <input #contactSearchBox class="form-control dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" autocomplete="off"
         [(ngModel)]="searchtext" [style.display]="selectedContact? 'none':'block'" placeholder="Search contacts...">
 
 
@@ -19,7 +19,7 @@
         <li><span class="dropdown-text">No contacts found (Start typing to try get a new match)</span></li>
         }
         @for(contact of contacts; track contact.id){
-        <li><span class="dropdown-item" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
+        <li><span class="dropdown-item" [attr.email]="contact.email" (click)="selectContact(contact)">{{contact.firstName}} {{contact.prefix}}
                 {{contact.lastName}} ({{contact.email}})</span></li>
         }
         <li>
